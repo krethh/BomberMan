@@ -179,9 +179,9 @@ public class MainMenuScreen implements Screen{
             game.batch.draw(highScoreButtonInactive, WINDOW_WIDTH/2 - BUTTON_WIDTH/2, WINDOW_HEIGHT*0.5f, BUTTON_WIDTH, BUTTON_HEIGHT);
 
         if(optionSelected == 3)
-            game.batch.draw(manualButtonActive, WINDOW_WIDTH/2 - BUTTON_WIDTH/2, WINDOW_HEIGHT*0.35f , BUTTON_WIDTH, BUTTON_HEIGHT);
+            game.batch.draw(serverButtonActive, WINDOW_WIDTH/2 - BUTTON_WIDTH/2, WINDOW_HEIGHT*0.35f , BUTTON_WIDTH, BUTTON_HEIGHT);
         else
-            game.batch.draw(manualButtonInactive, WINDOW_WIDTH/2 - BUTTON_WIDTH/2, WINDOW_HEIGHT*0.35f , BUTTON_WIDTH, BUTTON_HEIGHT);
+            game.batch.draw(serverButtonInactive, WINDOW_WIDTH/2 - BUTTON_WIDTH/2, WINDOW_HEIGHT*0.35f , BUTTON_WIDTH, BUTTON_HEIGHT);
 
         if(optionSelected == 4)
             game.batch.draw(exitButtonActive, WINDOW_WIDTH/2 - BUTTON_WIDTH/2, WINDOW_HEIGHT*0.2f , BUTTON_WIDTH, BUTTON_HEIGHT);

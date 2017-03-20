@@ -49,7 +49,6 @@ public class BomberMan extends Game {
 
 	@Override
 	public void create () {
-
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		camera.translate(camera.viewportWidth/2, camera.viewportHeight/2);
