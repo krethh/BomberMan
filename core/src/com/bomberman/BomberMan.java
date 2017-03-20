@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.bomberman.screens.MainGameScreen;
@@ -19,6 +20,7 @@ public class BomberMan extends Game {
 
     public static final float SPEED = 120;
     public static float DELTA;
+    public OrthographicCamera camera;
 
 	/**
 	 * Obiekt zawierający całą konfigurację gry.
@@ -49,6 +51,9 @@ public class BomberMan extends Game {
 	public void create () {
 
 		batch = new SpriteBatch();
+		camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		camera.translate(camera.viewportWidth/2, camera.viewportHeight/2);
+
         this.setScreen(new MainMenuScreen(this));
 	}
 

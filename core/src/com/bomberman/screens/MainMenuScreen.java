@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.bomberman.BomberMan;
 import javafx.geometry.Point2D;
@@ -97,6 +98,8 @@ public class MainMenuScreen implements Screen{
      */
     public short optionSelected;
 
+    OrthographicCamera camera;
+
     /**
      * Główny konstruktor.
      * @param game Odniesienie do głównego obiektu gry.
@@ -122,6 +125,8 @@ public class MainMenuScreen implements Screen{
 
     @Override
     public void show() {
+        camera  = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.translate(camera.viewportWidth/2, camera.viewportHeight/2);
 
     }
 
@@ -153,7 +158,9 @@ public class MainMenuScreen implements Screen{
                 System.exit(1);
         }
 
+        camera.update();
         game.batch.begin();
+        game.batch.setProjectionMatrix(camera.combined);
 
         //rysuj przyciski
         if(optionSelected == 0)
@@ -181,12 +188,13 @@ public class MainMenuScreen implements Screen{
         else
             game.batch.draw(exitButtonInactive, WINDOW_WIDTH/2 - BUTTON_WIDTH/2, WINDOW_HEIGHT*0.2f , BUTTON_WIDTH, BUTTON_HEIGHT);
 
+
         game.batch.end();
     }
 
     @Override
     public void resize(int width, int height) {
-
+        game.camera = new OrthographicCamera(width, height);
     }
 
     @Override

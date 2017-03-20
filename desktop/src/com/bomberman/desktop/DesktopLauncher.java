@@ -16,6 +16,7 @@ public class DesktopLauncher {
 			config.width = bomberConfig.pixelWidth;
 			config.height = bomberConfig.pixelHeight;
 			config.foregroundFPS = bomberConfig.FPS;
+			config.resizable = true;
 			new LwjglApplication(new BomberMan(bomberConfig), config);
 		}
 		catch(IOException e)
