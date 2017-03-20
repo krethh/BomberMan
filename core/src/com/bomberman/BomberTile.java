@@ -28,5 +28,4 @@ public class BomberTile {
         this.y = y;
         this.type = type;
     }
-
 }
