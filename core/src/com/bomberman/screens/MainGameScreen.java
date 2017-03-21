@@ -383,7 +383,7 @@ public class MainGameScreen implements Screen {
                 game.batch.draw(shockwave, t.x, t.y, TILE_WIDTH, TILE_HEIGHT);
 
                 if(t == getTile(heroX, heroY))
-                    game.setScreen(new GameOverScreen());
+                    game.setScreen(new GameOverScreen(game));
             });
         });
 
