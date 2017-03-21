@@ -37,6 +37,21 @@ public class MainGameScreen implements Screen {
     public final float SPEED;
 
     /**
+     * Lista przechowująca przeciwników bombera.
+     */
+    public ArrayList<BomberEnemy> enemies;
+
+    /**
+     * Martwi przeciwnicy.
+     */
+    public ArrayList<BomberEnemy> deadEnemies;
+
+    /**
+     * Poziom trudności (1,2,3)
+     */
+    public short difficulty;
+
+    /**
      * Szerokośc kafelka.
      */
     public float TILE_WIDTH;
@@ -59,17 +74,22 @@ public class MainGameScreen implements Screen {
     /**
      * Współrzędna X gracza.
      */
-    private float heroX;
+    public float heroX;
 
     /**
      * Wspołrzędna Y gracza.
      */
-    private float heroY;
+    public float heroY;
 
     /**
      * Tekstura głównego bohatera.
      */
     private Texture hero;
+
+    /**
+     * Tekstura wroga.
+     */
+    private Texture enemy;
 
     /**
      * Tekstura ściany.
@@ -124,22 +144,27 @@ public class MainGameScreen implements Screen {
     /**
      * Licznik sekund. Przydatny przy odliczaniu czasu i wybuchu bomb.
      */
-    private long timeCounter;
+    public long timeCounter;
 
     /**
      * Lista bomb, które w tej chwili są podłożone.
      */
-    private ArrayList<Bomb> bombsPlanted;
+    public ArrayList<Bomb> bombsPlanted;
 
     /**
      * Lista fal uderzeniowych, które aktualnie mają miejsce.
      */
-    private ArrayList<Shockwave> activeShockwaves;
+    public ArrayList<Shockwave> activeShockwaves;
 
     /**
      * Kafelek, gdzie znajduje się ulepszenie superbomby.
      */
     public ArrayList<BomberTile> superbombTiles;
+
+    /**
+     * Kafelki, gdzie znajdują się multibomby.
+     */
+    public ArrayList<BomberTile> multibombTiles;
 
     /**
      * Kamera, która służy do wyświetlania i skalowania ekranu gry.
@@ -172,16 +197,22 @@ public class MainGameScreen implements Screen {
     private final double startTime;
 
     /**
+     * Czas pozyskania multibomby.
+     */
+    public long multibombAcquisitionTime;
+
+    /**
      * Konstuktor ekranu.
      * @param game Odniesienie do głównej aplikacji gry.
      * @param map Mapa, która będzie narysowana.
      */
-    public MainGameScreen(BomberMan game, BomberMap map)
+    public MainGameScreen(BomberMan game, BomberMap map, short difficulty)
     {
         this.game = game;
         currentMap = map;
         mapGrid = generateGrid();
         SPEED = game.bomberConfig.speed;
+        this.difficulty = difficulty;
 
         TILE_HEIGHT =  Gdx.graphics.getHeight()/currentMap.screenHeight;
         TILE_WIDTH = (Gdx.graphics.getWidth() - game.bomberConfig.panelWidth)/currentMap.screenWidth;
@@ -192,15 +223,34 @@ public class MainGameScreen implements Screen {
         bombsPlanted = new ArrayList<>();
         activeShockwaves = new ArrayList<>();
 
+        // załaduj superbomby
         String[] superbombChars = currentMap.superbombPositions.split("\\s");
         superbombTiles = new ArrayList<>();
         for(String c : superbombChars)
             superbombTiles.add(mapGrid.get(Integer.valueOf(c)));
 
+        // załaduj multibomby
+        String[] multibombChars = currentMap.multibombPositions.split("\\s");
+        multibombTiles = new ArrayList<>();
+        for (String c : multibombChars)
+            multibombTiles.add(mapGrid.get(Integer.valueOf(c)));
+
         collisionHandler = new BomberCollisionHandler(this);
 
         timeCounter = 0;
         startTime = System.currentTimeMillis();
+
+        // wypełnij tablicę z wrogami
+        String[] enemyPositions = currentMap.enemyPositions.split("\\s");
+        enemies = new ArrayList<>();
+
+        for(int i = 0; i < difficulty; i++)
+        {
+            int index = Integer.valueOf(enemyPositions[i]);
+            enemies.add(new BomberEnemy(mapGrid.get(index).x, mapGrid.get(index).y, collisionHandler, game, this));
+        }
+
+        deadEnemies = new ArrayList<>();
     }
 
     /**
@@ -218,6 +268,7 @@ public class MainGameScreen implements Screen {
         multibombLetter = new Texture("img" + File.separator + "multibomba.png");
         multibombInactive = new Texture("img" + File.separator + "multibomba_szara.png");
         superbombInactive = new Texture("img" + File.separator + "superbomba_szara.png");
+        enemy = new Texture("img" + File.separator + "enemy.png");
 
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         font = new BitmapFont();
@@ -230,7 +281,6 @@ public class MainGameScreen implements Screen {
      */
     @Override
     public void render(float delta) {
-
         DELTA = Gdx.graphics.getDeltaTime();
 
         timeCounter = (long) (System.currentTimeMillis() - startTime)/1000;
@@ -263,33 +313,35 @@ public class MainGameScreen implements Screen {
         /// ruch bohatera w prawo
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT))
         {
-            if(!collisionHandler.canPenetrate(heroX + DELTA*SPEED, heroY))
+            if(!collisionHandler.cannotPenetrate(heroX + DELTA*SPEED, heroY))
                 heroX += DELTA*SPEED;
         }
 
         // ruch bohatera w lewo
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT))
         {
-            if(!collisionHandler.canPenetrate(heroX - DELTA*SPEED, heroY))
+            if(!collisionHandler.cannotPenetrate(heroX - DELTA*SPEED, heroY))
                 heroX -= DELTA*SPEED;
         }
 
         //ruch bohatera w górę
         if(Gdx.input.isKeyPressed(Input.Keys.UP))
         {
-            if(!collisionHandler.canPenetrate(heroX, heroY + DELTA*SPEED))
+            if(!collisionHandler.cannotPenetrate(heroX, heroY + DELTA*SPEED))
                 heroY += DELTA*SPEED;
         }
 
         // ruch bohatera w dół
         if(Gdx.input.isKeyPressed(Input.Keys.DOWN))
         {
-            if(!collisionHandler.canPenetrate(heroX, heroY - DELTA*SPEED))
+            if(!collisionHandler.cannotPenetrate(heroX, heroY - DELTA*SPEED))
                 heroY -= DELTA*SPEED;
         }
 
         //podłożenie bomby
-        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && bombsPlanted.stream().filter(b -> b.isPlantedByUser).count() == 0)
+        // jeżeli jest zero bomb lub player ma multibombę i jest mniej niż 3
+        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) &&
+                (bombsPlanted.stream().filter(b -> b.isPlantedByUser).count() == 0 || (playerHasMultibomb && bombsPlanted.stream().filter(b -> b.isPlantedByUser).count() < 3)))
         {
             bombsPlanted.add(new Bomb(
                     false, heroX, heroY, timeCounter, true
@@ -308,6 +360,7 @@ public class MainGameScreen implements Screen {
         //jeżeli jakaś bomba ma wybuchnąć, znajdź tę bombę
         Optional<Bomb> explodingBomb = bombsPlanted.stream().filter(b -> b.plantingTime + game.bomberConfig.bombWaitingTime == timeCounter).findFirst();
 
+
         // usuń wybuchające bomby z podłożonych bomb
         bombsPlanted = bombsPlanted.stream().filter(b-> b.plantingTime + game.bomberConfig.bombWaitingTime != timeCounter).collect(Collectors.toCollection(ArrayList::new));
 
@@ -321,19 +374,22 @@ public class MainGameScreen implements Screen {
         if(explodingBomb.isPresent())
         {
             Bomb b = explodingBomb.get();
-            activeShockwaves.add(new Shockwave(b, timeCounter, getTile(b.x, b.y)));
+            activeShockwaves.add(new Shockwave(b, timeCounter, getTile(b.x, b.y), mapGrid, game, currentMap));
         }
 
-        // dla każdej fali uderzeniowej narysuj tę falę
+        // dla każdej fali uderzeniowej narysuj tę falę i sprawdź, czy nie ginie bohater
         activeShockwaves.stream().forEach(s -> {
-            getShockwavePath(s.tileOfExplosion, s.bomb.isSuperbomb).stream().forEach(t -> {
+            s.shockwavePath.stream().forEach(t -> {
                 game.batch.draw(shockwave, t.x, t.y, TILE_WIDTH, TILE_HEIGHT);
+
+                if(t == getTile(heroX, heroY))
+                    game.setScreen(new GameOverScreen());
             });
         });
 
         //zniszcz przeszkody
         activeShockwaves.stream().filter(s -> s.explosionTime + game.bomberConfig.shockwaveTime == timeCounter).forEach(s -> {
-            getShockwavePath(s.tileOfExplosion, s.bomb.isSuperbomb).stream().forEach(t -> {
+            s.shockwavePath.stream().forEach(t -> {
                 if(t.type == 'o')
                     t.type = 'p';
             });
@@ -350,9 +406,41 @@ public class MainGameScreen implements Screen {
                 game.batch.draw(superbombLetter, s.x, s.y, TILE_WIDTH, TILE_HEIGHT);
         });
 
+        // narysuj multibomby
+        multibombTiles.stream().forEach(m ->{
+            if(m.type == 'p')
+                game.batch.draw(multibombLetter, m.x, m.y, TILE_WIDTH, TILE_HEIGHT );
+        });
+
         // zbieranie achievementów
         if(collisionHandler.picksUpSuperbomb(heroX, heroY))
             playerHasSuperbomb = true;
+
+        if(collisionHandler.picksUpMultibomb(heroX, heroY))
+        {
+            playerHasMultibomb = true;
+            multibombAcquisitionTime = timeCounter;
+        }
+
+        // sprawdź, czy multibomba się nie przeterminowuje
+        if(multibombAcquisitionTime + game.bomberConfig.multibombDuration == timeCounter)
+            playerHasMultibomb = false;
+
+        //zniszcz martwych przeciwników
+        deadEnemies.stream().forEach(d -> {
+            if(enemies.contains(d))
+                enemies.remove(d);
+        });
+
+        // wykonaj ruchy przeciwników
+        enemies.stream().forEach(e -> {
+            e.act();
+        });
+
+        // rysuj przeciwników
+        enemies.stream().forEach(e -> {
+            game.batch.draw(enemy, e.x, e.y, 0.95f*TILE_WIDTH, 0.95f*TILE_HEIGHT);
+        });
 
         renderGamePanel();
 
@@ -365,7 +453,7 @@ public class MainGameScreen implements Screen {
      * @param y Współrzędna y punktu.
      * @return Obiekt kafelka, do którego należy ten punkt.
      */
-    private BomberTile getTile(float x, float y)
+    public BomberTile getTile(float x, float y)
     {
         int i = 0;
         BomberTile smallest = mapGrid.get(i);
@@ -452,93 +540,6 @@ public class MainGameScreen implements Screen {
     }
 
     /**
-     * Zwraca listę kafelków, do których powinna dotrzeć fala uderzeniowa.
-     * @param start Kafelek, w którym wybuchła bomba.
-     * @return Lista kafelków, do których dotrze fala uderzeniowa.
-     */
-    private ArrayList<BomberTile> getShockwavePath(BomberTile start, boolean isSuperbomb)
-    {
-        int factor = isSuperbomb ? 2 : 1;
-        ArrayList<BomberTile> shockwaveTiles = new ArrayList<>();
-        shockwaveTiles.add(start);
-
-        //znajdz pozycje w liscie kafelków
-        int index = 0;
-        for (; index < mapGrid.size(); index++)
-        {
-            if(mapGrid.get(index) == start)
-                break;
-        }
-
-        // w prawo
-        for (int i = 0, j = index; i < factor*game.bomberConfig.shockwaveLength && (j + 1) % currentMap.screenWidth != 0; i++, j++)
-        {
-            if(mapGrid.get(j).type == 'w')
-                break;
-            if(mapGrid.get(j).type == 'o')
-            {
-                shockwaveTiles.add(mapGrid.get(j));
-                if(factor == 1)
-                    break;
-                else
-                    factor = 1;
-            }
-            if(mapGrid.get(j).type == 'p')
-                shockwaveTiles.add(mapGrid.get(j));
-        }
-
-        // w lewo
-        for (int i = 0, j = index; i < factor*game.bomberConfig.shockwaveLength && (j) % currentMap.screenWidth != 0; i++, j--)
-        {
-            if(mapGrid.get(j).type == 'w')
-                break;
-            if(mapGrid.get(j).type == 'o')
-            {
-                shockwaveTiles.add(mapGrid.get(j));
-                if(factor == 1)
-                    break;
-                else
-                    factor = 1;
-            }
-            if(mapGrid.get(j).type == 'p')
-                shockwaveTiles.add(mapGrid.get(j));
-        }
-
-        // w górę
-        for (int i = 0, j = index; i < factor*game.bomberConfig.shockwaveLength && (j + 16) < currentMap.screenWidth * currentMap.screenHeight; i++, j+=16)
-        {
-            if(mapGrid.get(j).type == 'w')
-                break;
-            if(mapGrid.get(j).type == 'o')
-            {
-                shockwaveTiles.add(mapGrid.get(j));
-                if(factor == 1)
-                    break;
-                else
-                    factor = 1;
-            }
-            if(mapGrid.get(j).type == 'p')
-                shockwaveTiles.add(mapGrid.get(j));
-        }
-
-        // w dół
-        for (int i = 0, j = index; i < factor*game.bomberConfig.shockwaveLength && (j - 16) > 0; i++, j-=16) {
-            if (mapGrid.get(j).type == 'w')
-                break;
-            if (mapGrid.get(j).type == 'o') {
-                shockwaveTiles.add(mapGrid.get(j));
-                if(factor == 1)
-                    break;
-                else
-                    factor = 1;
-            }
-            if (mapGrid.get(j).type == 'p')
-                shockwaveTiles.add(mapGrid.get(j));
-        }
-        return shockwaveTiles;
-    }
-
-    /**
      * Rysuje panel gry.
      */
     private void renderGamePanel()
@@ -551,7 +552,6 @@ public class MainGameScreen implements Screen {
 
         game.batch.draw(playerHasSuperbomb ? superbombLetter  : superbombInactive, 0, camera.viewportHeight*0.65f, TILE_WIDTH, TILE_HEIGHT);
         game.batch.draw(playerHasMultibomb ? multibombLetter  :  multibombInactive, game.bomberConfig.panelWidth/2, camera.viewportHeight*0.65f, TILE_WIDTH, TILE_HEIGHT);
-
-
     }
+
 }

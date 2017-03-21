@@ -60,6 +60,11 @@ public class BomberConfig {
      */
     public final short speed;
 
+    /**
+     * Czas trwania multibomby.
+     */
+    public final short multibombDuration;
+
 
     public BomberConfig() throws IOException {
 
@@ -76,6 +81,7 @@ public class BomberConfig {
         pixelHeight = Short.valueOf(properties.getProperty("pixelHeight"));
         FPS = Short.valueOf(properties.getProperty("fps"));
         speed = Short.valueOf(properties.getProperty("speed"));
+        multibombDuration = Short.valueOf(properties.getProperty("multibombDuration"));
 
         /// przeszukaj folder maps w celu załadowania wszystkich map do obiektu konfiguracyjnego
         ArrayList<String> mapPaths = DirectoryUtils.findFilesWithExtension("maps", ".mapconfig");

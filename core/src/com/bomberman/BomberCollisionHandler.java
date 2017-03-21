@@ -2,6 +2,7 @@ package com.bomberman;
 
 import com.bomberman.screens.MainGameScreen;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -30,10 +31,22 @@ public class BomberCollisionHandler {
      * @param y Współrzędna y prostokąta enkapsulującego postać.
      * @return False jeżeli postac nie może iść dalej.
      */
-    public boolean canPenetrate(float x, float y){
+    public boolean cannotPenetrate(float x, float y){
         ArrayList<BomberTile> walls = screen.mapGrid.stream().filter(t -> t.type == 'w' || t.type == 'o').collect(Collectors.toCollection(ArrayList::new));
 
         for(BomberTile t : walls)
+        {
+            if(haveCollision(x, y, t))
+                return true;
+        }
+        return false;
+    }
+
+    public boolean encountersObstacle(float x, float y)
+    {
+        ArrayList<BomberTile> walls = screen.mapGrid.stream().filter(t -> t.type == 'o').collect(Collectors.toCollection(ArrayList::new));
+
+        for (BomberTile t : walls)
         {
             if(haveCollision(x, y, t))
                 return true;
@@ -54,6 +67,19 @@ public class BomberCollisionHandler {
         return false;
     }
 
+    public boolean picksUpMultibomb(float x, float y)
+    {
+        for(BomberTile t : screen.multibombTiles)
+        {
+            if(haveCollision(x, y, t))
+            {
+                screen.multibombTiles.remove(t);
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Sprawdza, czy występuje kolizja prostokątów.
      * @param x Współrzędna x lewego dolnego rogu.
@@ -61,7 +87,7 @@ public class BomberCollisionHandler {
      * @param t Kafelek, z którym może wystąpić kolizja.
      * @return true jeżeli występuje kolizja.
      */
-    private boolean haveCollision(float x, float y, BomberTile t)
+    public boolean haveCollision(float x, float y, BomberTile t)
     {
         return (x < t.x + screen.TILE_WIDTH && y < t.y +
                 screen.TILE_HEIGHT && x +

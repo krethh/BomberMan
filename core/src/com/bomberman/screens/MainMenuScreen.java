@@ -76,12 +76,12 @@ public class MainMenuScreen implements Screen{
     /**
      * Szerokość przycisków.
      */
-    private static final int BUTTON_WIDTH = 250;
+    private static int BUTTON_WIDTH = 250;
 
     /**
      * Wysokośc przycisków.
      */
-    private static final int BUTTON_HEIGHT = 100;
+    private static int BUTTON_HEIGHT = 100;
 
     /**
      * Wysokość okna
@@ -127,7 +127,6 @@ public class MainMenuScreen implements Screen{
     public void show() {
         camera  = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.translate(camera.viewportWidth/2, camera.viewportHeight/2);
-
     }
 
     @Override
@@ -151,7 +150,7 @@ public class MainMenuScreen implements Screen{
         {
             if(optionSelected == 0)
             {
-                game.setScreen(new MainGameScreen(game, game.bomberConfig.maps.get(0)));
+                game.setScreen(new MainGameScreen(game, game.bomberConfig.maps.get(0), (short) 2));
             }
 
             if(optionSelected == 4)
@@ -188,7 +187,6 @@ public class MainMenuScreen implements Screen{
         else
             game.batch.draw(exitButtonInactive, WINDOW_WIDTH/2 - BUTTON_WIDTH/2, WINDOW_HEIGHT*0.2f , BUTTON_WIDTH, BUTTON_HEIGHT);
 
-
         game.batch.end();
     }
 
@@ -198,23 +196,15 @@ public class MainMenuScreen implements Screen{
     }
 
     @Override
-    public void pause() {
-
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-
-    }
+    public void resume() {}
 
     @Override
-    public void hide() {
-
-    }
+    public void hide() {}
 
     @Override
-    public void dispose() {
-
-    }
+    public void dispose() {}
 
 }
