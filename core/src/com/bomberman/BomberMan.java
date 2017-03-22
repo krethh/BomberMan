@@ -65,4 +65,5 @@ public class BomberMan extends Game {
 	public void dispose () {
 		batch.dispose();
 	}
+
 }

@@ -1,7 +1,5 @@
 package com.bomberman.screens;
 
-import org.lwjgl.opengl.XRandR;
-
 /**
  * Created by Wojtek on 21.03.2017.
  */
