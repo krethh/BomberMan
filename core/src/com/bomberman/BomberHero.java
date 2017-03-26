@@ -17,6 +17,11 @@ public class BomberHero implements Collidable {
 
     float x, y;
 
+    /**
+     * Mówi, czy bohater zginął.
+     */
+    public boolean isDead;
+
     public BomberHero(float x, float y, MainGameScreen screen)
     {
         this.x = x;
@@ -27,28 +32,24 @@ public class BomberHero implements Collidable {
     public void moveUp()
     {
         y += screen.DELTA*screen.SPEED;
-        checkCollisions();
     }
 
     public void moveDown()
     {
         y -= screen.DELTA*screen.SPEED;
-        checkCollisions();
     }
 
     public void moveLeft()
     {
         x -= screen.DELTA*screen.SPEED;
-        checkCollisions();
     }
 
     public void moveRight()
     {
         x += screen.DELTA*screen.SPEED;
-        checkCollisions();
     }
 
-    private void checkCollisions()
+    public void checkCollisions()
     {
         ArrayList<BomberCollision> collisions = new ArrayList<>();
 

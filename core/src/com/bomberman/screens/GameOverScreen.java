@@ -19,6 +19,8 @@ public class GameOverScreen implements Screen {
 
     OrthographicCamera camera;
 
+    private BitmapFont font;
+
     public GameOverScreen(BomberMan game){
         this.game = game;
     }
@@ -27,14 +29,13 @@ public class GameOverScreen implements Screen {
     public void show() {
         camera  = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.translate(camera.viewportWidth/2, camera.viewportHeight/2);
+        font = new BitmapFont();
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        BitmapFont font = new BitmapFont();
 
         camera.update();
         game.batch.begin();

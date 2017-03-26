@@ -399,6 +399,7 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
     {
         timeCounter = (long) (System.currentTimeMillis() - pauseOffset - startTime)/1000;
 
+        hero.checkCollisions();
         checkExplosions();
         if(movesRight)
             if(!penetrationHandler.cannotPenetrate(hero.getX() + DELTA*SPEED, hero.getY()))
