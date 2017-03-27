@@ -18,8 +18,6 @@ import java.io.IOException;
  */
 public class BomberMan extends Game {
 
-    public static final float SPEED = 120;
-    public static float DELTA;
     public OrthographicCamera camera;
 
 	/**

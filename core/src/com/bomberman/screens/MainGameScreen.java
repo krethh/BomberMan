@@ -217,9 +217,24 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
      */
     public long multibombAcquisitionTime;
 
+    /**
+     * Czy gracz rusza się w prawo.
+     */
     private boolean movesRight;
+
+    /**
+     * Czy gracz rusza się w lewo.
+     */
     private boolean movesLeft;
+
+    /**
+     * Czy gracz rusza się w górę.
+     */
     private boolean movesUp;
+
+    /**
+     * Czy gracz rusza się w dół
+     */
     private boolean movesDown;
 
     /**
@@ -527,6 +542,11 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
         game.batch.draw(playerHasMultibomb ? multibombLetter  :  multibombInactive, game.bomberConfig.panelWidth/2, camera.viewportHeight*0.65f, TILE_WIDTH, TILE_HEIGHT);
     }
 
+    /**
+     * Handler przyciśnięcia przycisku.
+     * @param keycode Kod wciśniętego przycisku.
+     * @return true, jeżeli sukces.
+     */
     @Override
     public boolean keyDown(int keycode) {
         if(keycode == Input.Keys.RIGHT)
@@ -577,6 +597,11 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
         return true;
     }
 
+    /**
+     * Handler podniesienia przycisku.
+     * @param keycode Podniesiony przycisk
+     * @return True, jeżeli sukces.
+     */
     @Override
     public boolean keyUp(int keycode) {
         if(keycode == Input.Keys.RIGHT)
@@ -594,36 +619,79 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
         return true;
     }
 
+    /**
+     * Do obsługi znaków z klawiatury.
+     * @param character Wprowadzony znak.
+     * @return True jeżeli sukces.
+     */
     @Override
     public boolean keyTyped(char character) {
         return false;
     }
 
+    /**
+     * Do obsługi ekranów dotykowych, nieużywany.
+     * @param screenX
+     * @param screenY
+     * @param pointer
+     * @param button
+     * @return
+     */
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         return false;
     }
 
+    /**
+     * Do obsługi ekranów dotykowych, nieużywany.
+     * @param screenX
+     * @param screenY
+     * @param pointer
+     * @param button
+     * @return
+     */
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         return false;
     }
 
+    /**
+     * Do obsługi ekranów dotykowych, nieużywany.
+     * @param screenX
+     * @param screenY
+     * @param pointer
+     * @return
+     */
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         return false;
     }
 
+    /**
+     * Handler poruszenia myszką, nieużywany.
+     * @param screenX
+     * @param screenY
+     * @return
+     */
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
         return false;
     }
 
+    /**
+     * Handler scrollowania, nieużywany.
+     * @param amount
+     * @return
+     */
     @Override
     public boolean scrolled(int amount) {
         return false;
     }
 
+    /**
+     * Obsługuje zdarzenie kolizji.
+     * @param collision Kolizja.
+     */
     @Override
     public void handleCollision(BomberCollision collision) {
 
@@ -651,6 +719,9 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
         }
     }
 
+    /**
+     * Sprawdza, czy w danym momencie występują nowe eksplozje.
+     */
     private void checkExplosions()
     {
         ArrayList<Bomb> explodingBombs = bombsPlanted.stream().filter(b -> b.plantingTime + game.bomberConfig.bombWaitingTime == timeCounter).collect(Collectors.toCollection(ArrayList::new));

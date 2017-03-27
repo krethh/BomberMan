@@ -1,11 +1,15 @@
 package com.bomberman.interfaces;
 
-import com.bomberman.screens.BomberExplosion;
+import com.bomberman.BomberExplosion;
 
 /**
- * Created by Paweł Kulig on 22.03.2017.
+ * Obserwator eksplozji.
  */
 public interface ExplosionObserver {
 
+    /**
+     * Obsługiwanie zdarzenia eksplozji.
+     * @param e Eksplozja
+     */
     public void handleExplosion(BomberExplosion e);
 }

@@ -59,6 +59,9 @@ public class Shockwave {
         generateShockwavePath();
     }
 
+    /**
+     * Generuje ścieżkę rozchodzenia się fali uderzeniowej.
+     */
     private void generateShockwavePath()
     {
         int factor = bomb.isSuperbomb ? 2 : 1;

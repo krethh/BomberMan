@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 /**
- * Klasa służąca do obsługiwania wszelakich kolizji.
+ * Klasa służąca do obsługiwania wchodzenia w ściany.
  */
 public class BomberPenetrationHandler {
 
@@ -18,7 +18,7 @@ public class BomberPenetrationHandler {
 
     /**
      * Główny konstruktor.
-     * @param screen Ekran, na którym detekujemy kolizje.
+     * @param screen Ekran, na którym detekujemy wchodzenie w ściany.
      */
     public BomberPenetrationHandler(MainGameScreen screen)
     {
@@ -42,6 +42,12 @@ public class BomberPenetrationHandler {
         return false;
     }
 
+    /**
+     * Mówi, czy dany prostokąt napotyka na przeszkodą.
+     * @param x Wspołrzędna x lewego dolnego rogu prostokąta.
+     * @param y Wspołrzędna y lewego dolnego rogu prostokąta.
+     * @return true jeżeli napotyka.
+     */
     public boolean encountersObstacle(float x, float y)
     {
         ArrayList<BomberTile> walls = screen.mapGrid.stream().filter(t -> t.type == 'o').collect(Collectors.toCollection(ArrayList::new));

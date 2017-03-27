@@ -2,6 +2,7 @@ package com.bomberman.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -16,7 +17,7 @@ import java.io.File;
  * Klasa reprezentująca ekran głównego menu.
  * @author Paweł Kulig, Wojciech Sobczak
  */
-public class MainMenuScreen implements Screen{
+public class MainMenuScreen implements Screen, InputProcessor{
 
     /**
      * Pole przechowujące odniesienie do głównego obiektu gry.
@@ -121,41 +122,28 @@ public class MainMenuScreen implements Screen{
 
         WINDOW_HEIGHT = game.bomberConfig.pixelHeight;
         WINDOW_WIDTH = game.bomberConfig.pixelWidth;
+
+        Gdx.input.setInputProcessor(this);
     }
 
+    /**
+     * Metoda wywoływana przy tworzeniu ekranu.
+     */
     @Override
     public void show() {
         camera  = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.translate(camera.viewportWidth/2, camera.viewportHeight/2);
     }
 
+    /**
+     * Metoda wywoływana w każdej klatce.
+     * @param delta Odstęp czasowy między klatkami.
+     */
     @Override
     public void render(float delta) {
 
         Gdx.gl.glClearColor(0.8f, 0.8f, 0.8f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        if(Gdx.input.isKeyJustPressed(Input.Keys.DOWN))
-        {
-            optionSelected = (short) ((optionSelected + 1) % 5);
-        }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.UP))
-        {
-            if(optionSelected == 0)
-                optionSelected = 4;
-            else
-                optionSelected = (short) ((optionSelected - 1) % 5);
-        }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER))
-        {
-            if(optionSelected == 0)
-            {
-                game.setScreen(new MainGameScreen(game, game.bomberConfig.maps.get(0), (short) 2));
-            }
-
-            if(optionSelected == 4)
-                System.exit(1);
-        }
 
         camera.update();
         game.batch.begin();
@@ -190,21 +178,167 @@ public class MainMenuScreen implements Screen{
         game.batch.end();
     }
 
+    /**
+     * Handler przeskalowania okna.
+     * @param width Nowa szerokość.
+     * @param height Nowa wysokość.
+     */
     @Override
     public void resize(int width, int height) {
         game.camera = new OrthographicCamera(width, height);
     }
 
+    /**
+     * Handler pauzy, tu nieużywany.
+     */
     @Override
-    public void pause() {}
+    public void pause() {
 
-    @Override
-    public void resume() {}
+    }
 
+    /**
+     * Handler wznowienia, tu nieużywany.
+     */
     @Override
-    public void hide() {}
+    public void resume() {
 
+    }
+
+    /**
+     * Handler schowania okienka.
+     */
     @Override
-    public void dispose() {}
+    public void hide() {
+
+    }
+
+    /**
+     * Handler zniszczenia okienka.
+     */
+    @Override
+    public void dispose() {
+
+    }
+
+    /**
+     * Handler przyciśnięcia przycisku.
+     * @param keycode Kod wciśniętego przycisku.
+     * @return true, jeżeli sukces.
+     */
+    @Override
+    public boolean keyDown(int keycode) {
+
+        if(keycode == (Input.Keys.DOWN))
+        {
+            optionSelected = (short) ((optionSelected + 1) % 5);
+        }
+        if(keycode == (Input.Keys.UP))
+        {
+            if(optionSelected == 0)
+                optionSelected = 4;
+            else
+                optionSelected = (short) ((optionSelected - 1) % 5);
+        }
+        if(keycode == (Input.Keys.ENTER))
+        {
+            if(optionSelected == 0)
+            {
+                game.setScreen(new MainGameScreen(game, game.bomberConfig.maps.get(0), (short) 2));
+            }
+
+            if(optionSelected == 1)
+            {
+                game.setScreen(new ManualScreen(game));
+            }
+
+            if(optionSelected == 3)
+            {
+                game.setScreen(new ServerScreen(game));
+            }
+
+            if(optionSelected == 4)
+                System.exit(1);
+        }
+        return true;
+    }
+
+    /**
+     * Handler podniesienia przycisku.
+     * @param keycode Podniesiony przycisk
+     * @return True, jeżeli sukces.
+     */
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    /**
+     * Do obsługi znaków z klawiatury.
+     * @param character Wprowadzony znak.
+     * @return True jeżeli sukces.
+     */
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    /**
+     * Do obsługi ekranów dotykowych, nieużywany.
+     * @param screenX
+     * @param screenY
+     * @param pointer
+     * @param button
+     * @return
+     */
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    /**
+     * Do obsługi ekranów dotykowych, nieużywany.
+     * @param screenX
+     * @param screenY
+     * @param pointer
+     * @param button
+     * @return
+     */
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    /**
+     * Do obsługi ekranów dotykowych, nieużywany.
+     * @param screenX
+     * @param screenY
+     * @param pointer
+     * @return
+     */
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    /**
+     * Handler poruszenia myszką, nieużywany.
+     * @param screenX
+     * @param screenY
+     * @return
+     */
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    /**
+     * Handler scrollowania, nieużywany.
+     * @param amount
+     * @return
+     */
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
+    }
 
 }

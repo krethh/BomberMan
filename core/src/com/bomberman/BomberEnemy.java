@@ -58,6 +58,11 @@ public class BomberEnemy implements Collidable {
         this.screen = screen;
     }
 
+    /**
+     * Sprawdza, czy istnieje kolizja z innym obiektem.
+     * @param other Inny obiekt.
+     * @return True, jeżeli występuje.
+     */
     @Override
     public boolean hasCollisionWith(Collidable other) {
         return (x < other.getX() + screen.TILE_WIDTH && y < other.getY() +
@@ -66,11 +71,19 @@ public class BomberEnemy implements Collidable {
                 screen.TILE_HEIGHT > other.getY());
     }
 
+    /**
+     * Zwraca współrzędna X.
+     * @return Współrzędna X.
+     */
     @Override
     public float getX() {
         return x;
     }
 
+    /**
+     * Zwraca współrzędną Y.
+     * @return Współrzędna Y.
+     */
     @Override
     public float getY() {
         return y;
@@ -86,6 +99,9 @@ public class BomberEnemy implements Collidable {
      */
     public movingDirection direction;
 
+    /**
+     * Czy przeciwnik jest martwy
+     */
     private boolean dead;
 
     /**
@@ -121,6 +137,9 @@ public class BomberEnemy implements Collidable {
             changeMovingDirection();
     }
 
+    /**
+     * Sprawdza, czy występują kolizje.
+     */
     private void checkCollisions() {
         ArrayList<BomberCollision> collisions = new ArrayList<>();
 
@@ -179,6 +198,9 @@ public class BomberEnemy implements Collidable {
         return true;
     }
 
+    /**
+     * Zmienia kierunek ruchu na w drugą stronę.
+     */
     private void changeMovingDirection()
     {
         if (direction == movingDirection.LEFT)
@@ -194,7 +216,9 @@ public class BomberEnemy implements Collidable {
             direction = movingDirection.LEFT;
     }
 
-
+    /**
+     * Podłożenie bomby.
+     */
     private void plantBomb()
     {
         if(!hasBombPlanted)
@@ -208,6 +232,10 @@ public class BomberEnemy implements Collidable {
 
     }
 
+    /**
+     * Sprawdza, czy istnieje w okolicy bomba.
+     * @return Bomba, jeżeli istnieje w okolicy.
+     */
     @Nullable
     private Bomb bombNearby()
     {
@@ -228,6 +256,10 @@ public class BomberEnemy implements Collidable {
         return null;
     }
 
+    /**
+     * Powoduje, że przeciwnik ucieka od bomby.
+     * @param b Bomba, od której ma uciekać.
+     */
     private void runAwayFromBomb(Bomb b)
     {
         float DELTA = Gdx.graphics.getDeltaTime();
@@ -278,11 +310,20 @@ public class BomberEnemy implements Collidable {
         }
     }
 
+    /**
+     * Dystans do jakiegoś punktu.
+     * @param x Współrzędna x tego punktu.
+     * @param y Współrzędna y tego punktu.
+     * @return Dystans do tego punktu.
+     */
     private double distanceTo(float x, float y)
     {
         return Math.sqrt(Math.pow(x - this.x, 2) + Math.pow(y - this.y, 2));
     }
 
+    /**
+     * Sprawia, że przeciwnik umiera.
+     */
     public void die()
     {
         screen.deadEnemies.add(this);

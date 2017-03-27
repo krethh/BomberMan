@@ -65,7 +65,10 @@ public class BomberConfig {
      */
     public final short multibombDuration;
 
-
+    /**
+     * Tworzy obiekt konfiguracyjny.
+     * @throws IOException W przypadku niemożności otwarcia pliku
+     */
     public BomberConfig() throws IOException {
 
         Properties properties = new Properties();

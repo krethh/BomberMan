@@ -8,23 +8,36 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.bomberman.BomberMan;
 
 /**
- * Created by Paweł Kulig on 21.03.2017.
+ * Ekran wyświetlany po nieudanej grze.
  */
 public class GameOverScreen implements Screen {
 
     /**
      * Odniesienie do głównego obiektu gry.
      */
-    BomberMan game;
+    private BomberMan game;
 
-    OrthographicCamera camera;
+    /**
+     * Kamera, służąca do obsługi wyświetlania ekranu.
+     */
+    private OrthographicCamera camera;
 
+    /**
+     * Czcionka do rysowania napisu.
+     */
     private BitmapFont font;
 
+    /**
+     * Konstruktor domyślny.
+     * @param game Gra, do której należy ekran.
+     */
     public GameOverScreen(BomberMan game){
         this.game = game;
     }
 
+    /**
+     * Metoda wywoływana przy pierwszym uruchomieniu ekranu.
+     */
     @Override
     public void show() {
         camera  = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -32,6 +45,10 @@ public class GameOverScreen implements Screen {
         font = new BitmapFont();
     }
 
+    /**
+     * Metoda wywoływana w każdej klatce.
+     * @param delta Odstęp czasowy między klatkami.
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(1, 0, 0, 1);
@@ -48,26 +65,43 @@ public class GameOverScreen implements Screen {
         game.batch.end();
     }
 
+    /**
+     * Handler przeskalowania okna.
+     * @param width Nowa szerokość
+     * @param height Nowa wysokość
+     */
     @Override
     public void resize(int width, int height) {
 
     }
 
+    /**
+     * Handler pauzy, tu nieużywany.
+     */
     @Override
     public void pause() {
 
     }
 
+    /**
+     * Handler wznowienia, tu nieużywany.
+     */
     @Override
     public void resume() {
 
     }
 
+    /**
+     * Handler schowania okienka.
+     */
     @Override
     public void hide() {
 
     }
 
+    /**
+     * Handler zniszczenia okienka.
+     */
     @Override
     public void dispose() {
 
