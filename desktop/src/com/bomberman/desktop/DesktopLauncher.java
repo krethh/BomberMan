@@ -7,7 +7,14 @@ import com.bomberman.BomberMan;
 
 import java.io.IOException;
 
+/**
+ * Klasa służąca do uruchomienia programu w okienku.
+ */
 public class DesktopLauncher {
+	/**
+	 * Główna klasa programu.
+	 * @param arg Parametr domyślny.
+	 */
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 

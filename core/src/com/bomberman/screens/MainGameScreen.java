@@ -248,7 +248,7 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
 
         this.game = game;
         currentMap = map;
-        mapGrid = generateGrid();
+        mapGrid = generateGrid(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         // przeskalowanie prędkości, w stosunku do rozmiaru okna
         SPEED = game.bomberConfig.speed*Gdx.graphics.getWidth()/800;
@@ -384,6 +384,13 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
             game.batch.draw(enemy, e.getX(), e.getY(), HERO_SCALING_FACTOR*TILE_WIDTH, HERO_SCALING_FACTOR*TILE_HEIGHT);
         });
 
+        if(paused)
+        {
+            font.setColor(Color.BLACK);
+            font.getData().setScale(3, 3);
+            font.draw(game.batch, "PAUZA", Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+        }
+
         renderGamePanel();
         game.batch.end();
     }
@@ -460,6 +467,7 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
      */
     @Override
     public void resize(int width, int height) {
+
     }
 
     /**
@@ -504,13 +512,10 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
      * Generuje listę współrzędnych, w któych są wyświetlane kolejne elementy mapy. Rezerwuje miejsce na panel z lewej strony.
      * @return Lista współrzędnych punktów.
      */
-    private ArrayList<BomberTile> generateGrid()
+    private ArrayList<BomberTile> generateGrid(float width, float height)
     {
         ArrayList<BomberTile> points = new ArrayList<>();
         int panelWidth = game.bomberConfig.panelWidth;
-
-        float width = Gdx.graphics.getWidth();
-        float height = Gdx.graphics.getHeight();
 
         int index = 0;
         for(int i = 0; i < currentMap.screenHeight; i++)
@@ -537,9 +542,11 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
 
         font.draw(game.batch, "Czas:", 10, camera.viewportHeight*0.9f);
         font.draw(game.batch, String.valueOf(timeCounter), 10, camera.viewportHeight*0.85f);
+        font.draw(game.batch, "Punkty: ", 10, camera.viewportHeight*0.5f);
+        font.draw(game.batch, "0", 10, camera.viewportHeight*0.4f);
 
-        game.batch.draw(playerHasSuperbomb ? superbombLetter  : superbombInactive, 0, camera.viewportHeight*0.65f, TILE_WIDTH, TILE_HEIGHT);
-        game.batch.draw(playerHasMultibomb ? multibombLetter  :  multibombInactive, game.bomberConfig.panelWidth/2, camera.viewportHeight*0.65f, TILE_WIDTH, TILE_HEIGHT);
+        game.batch.draw(playerHasSuperbomb ? superbombLetter  : superbombInactive, 0, camera.viewportHeight*0.65f, game.bomberConfig.panelWidth/3, game.bomberConfig.panelWidth/3);
+        game.batch.draw(playerHasMultibomb ? multibombLetter  :  multibombInactive, game.bomberConfig.panelWidth/2, camera.viewportHeight*0.65f, game.bomberConfig.panelWidth/3, game.bomberConfig.panelWidth/3);
     }
 
     /**

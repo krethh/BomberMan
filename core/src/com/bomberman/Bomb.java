@@ -1,5 +1,6 @@
 package com.bomberman;
 
+
 /**
  * Klasa reprezentująca bombę na planszy.
  * @author Paweł Kulig, Wojciech Sobczak

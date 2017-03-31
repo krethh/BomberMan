@@ -31,6 +31,11 @@ public class BomberMan extends Game {
 	public SpriteBatch batch;
 
 	/**
+	 * Nick gracza
+	 */
+	public String nick;
+
+	/**
 	 * Mapa, która obecnie jest grana.
 	 */
 	public BomberMap currentMap;

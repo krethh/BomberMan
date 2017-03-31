@@ -1,10 +1,13 @@
 package com.bomberman.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.bomberman.BomberMan;
 
 /**
@@ -18,31 +21,19 @@ public class ManualScreen implements Screen, InputProcessor {
     BomberMan game;
 
     /**
-     * Wysokość okna
-     */
-    private final int WINDOW_HEIGHT;
-
-    /**
-     * Szerokość okna.
-     */
-    private final int WINDOW_WIDTH;
-
-    /**
      * Kamera, służąca do obsługi wyświetlania.
      */
     private OrthographicCamera camera;
 
+    private BitmapFont font;
+
     /**
-     * Główny konstruktor.
-     * @param game Odniesienie do głównego obiektu gry.
+     * Konstruktor ekranu
+     * @param game Główny obiekt gry
      */
     public ManualScreen(BomberMan game)
     {
         this.game = game;
-
-
-        WINDOW_HEIGHT = game.bomberConfig.pixelHeight;
-        WINDOW_WIDTH = game.bomberConfig.pixelWidth;
 
         Gdx.input.setInputProcessor(this);
     }
@@ -52,6 +43,7 @@ public class ManualScreen implements Screen, InputProcessor {
      */
     @Override
     public void show() {
+        font = new BitmapFont();
         camera  = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.translate(camera.viewportWidth/2, camera.viewportHeight/2);
     }
@@ -67,10 +59,14 @@ public class ManualScreen implements Screen, InputProcessor {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
+
         game.batch.begin();
         game.batch.setProjectionMatrix(camera.combined);
+        font.setColor(Color.BLACK);
+        font.getData().setScale(3, 3);
 
-
+        font.draw(game.batch, "Narazie nic tu nie ma.", Gdx.graphics.getWidth()/3 , Gdx.graphics.getHeight()/2);
+        font.draw(game.batch, "Wciśnij ESC żeby powrócić", Gdx.graphics.getWidth()/3 , Gdx.graphics.getHeight()/2 + 50);
         game.batch.end();
     }
 
@@ -81,7 +77,8 @@ public class ManualScreen implements Screen, InputProcessor {
      */
     @Override
     public void resize(int width, int height) {
-
+        camera  = new OrthographicCamera(width, height);
+        camera.translate(camera.viewportWidth/2, camera.viewportHeight/2);
     }
 
     /**
@@ -123,7 +120,11 @@ public class ManualScreen implements Screen, InputProcessor {
      */
     @Override
     public boolean keyDown(int keycode) {
-        return false;
+        if(keycode == Input.Keys.ESCAPE)
+        {
+            game.setScreen(new MainMenuScreen(game));
+        }
+        return true;
     }
 
     /**

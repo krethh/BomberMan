@@ -87,12 +87,12 @@ public class MainMenuScreen implements Screen, InputProcessor{
     /**
      * Wysokość okna
      */
-    private final int WINDOW_HEIGHT;
+    private int WINDOW_HEIGHT;
 
     /**
      * Szerokość okna.
      */
-    private final int WINDOW_WIDTH;
+    private int WINDOW_WIDTH;
 
     /**
      * Mówi, która opcja jest obecnie wybrana.
@@ -185,7 +185,11 @@ public class MainMenuScreen implements Screen, InputProcessor{
      */
     @Override
     public void resize(int width, int height) {
-        game.camera = new OrthographicCamera(width, height);
+        camera  = new OrthographicCamera(width, height);
+        camera.translate(camera.viewportWidth/2, camera.viewportHeight/2);
+
+        WINDOW_WIDTH = Gdx.graphics.getWidth();
+        WINDOW_HEIGHT = Gdx.graphics.getHeight();
     }
 
     /**
@@ -243,12 +247,17 @@ public class MainMenuScreen implements Screen, InputProcessor{
         {
             if(optionSelected == 0)
             {
-                game.setScreen(new MainGameScreen(game, game.bomberConfig.maps.get(0), (short) 2));
+                game.setScreen(new EnterNickScreen(game));
             }
 
             if(optionSelected == 1)
             {
                 game.setScreen(new ManualScreen(game));
+            }
+
+            if(optionSelected == 2)
+            {
+                game.setScreen(new HighScoreScreen(game));
             }
 
             if(optionSelected == 3)

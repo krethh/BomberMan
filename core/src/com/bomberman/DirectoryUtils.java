@@ -25,6 +25,7 @@ public class DirectoryUtils {
 
         for (File file : dir.listFiles())
         {
+            //TODO: posortować pliki
             if(file.getName().endsWith(extension))
                 files.add(absolutePath + File.separator + "maps" + File.separator + file.getName());
         }
