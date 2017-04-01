@@ -26,6 +26,11 @@ public class BomberMan extends Game {
 	public BomberConfig bomberConfig;
 
 	/**
+	 * Obiekt zarządzający najwyższymi wynikami.
+	 */
+	public HighScoresManager highScoresManager;
+
+	/**
 	 * Kontener służący do przechowywania tekstur.
 	 */
 	public SpriteBatch batch;
@@ -49,9 +54,10 @@ public class BomberMan extends Game {
 	 * Główny konstruktor gry.
 	 * @param bomberConfig Obiekt konfiguracyjny, tworzony w klasie DesktopLauncher.
 	 */
-	public BomberMan(BomberConfig bomberConfig)
+	public BomberMan(BomberConfig bomberConfig, HighScoresManager highScoresManager)
 	{
 		this.bomberConfig = bomberConfig;
+		this.highScoresManager = highScoresManager;
 		currentMap = null;
 	}
 

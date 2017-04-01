@@ -36,6 +36,9 @@ public class NextLevelScreen implements Screen {
     public NextLevelScreen(BomberMan game)
     {
         this.game = game;
+
+        //update najwyższego wyniku gracza
+        game.highScoresManager.setScoreIfBetter(game.nick, game.points);
     }
 
     /**
