@@ -82,8 +82,11 @@ public class BomberTile implements Collidable, ExplosionObserver {
 
         /// jeżeli jesteś na drodze eksplozji, zmień się z przeszkody na przejście.
         e.shockwave.shockwavePath.stream().forEach(t ->{
-            if(t == this)
+            if(t == this) {
                 type = 'p';
+                if(e.shockwave.bomb.isPlantedByUser)
+                    screen.game.points += 5;
+            }
         });
     }
 }

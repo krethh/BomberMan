@@ -66,6 +66,11 @@ public class BomberConfig {
     public final short multibombDuration;
 
     /**
+     * Czas nieśmiertelności po dostaniu bombą.
+     */
+    public final short shockwaveRecoveryTime;
+
+    /**
      * Tworzy obiekt konfiguracyjny.
      * @throws IOException W przypadku niemożności otwarcia pliku
      */
@@ -85,6 +90,7 @@ public class BomberConfig {
         FPS = Short.valueOf(properties.getProperty("fps"));
         speed = Short.valueOf(properties.getProperty("speed"));
         multibombDuration = Short.valueOf(properties.getProperty("multibombDuration"));
+        shockwaveRecoveryTime = Short.valueOf(properties.getProperty("shockwaveRecoveryTime"));
 
         /// przeszukaj folder maps w celu załadowania wszystkich map do obiektu konfiguracyjnego
         ArrayList<String> mapPaths = DirectoryUtils.findFilesWithExtension("maps", ".mapconfig");

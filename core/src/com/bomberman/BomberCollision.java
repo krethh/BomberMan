@@ -25,7 +25,7 @@ public class BomberCollision implements CollisionSubject {
     /**
      * Wyliczenie możliwych rodzajów kolizji.
      */
-    public enum collisionType {HERO_SHOCKWAVE, HERO_BOMB, ENEMY_SHOCKWAVE, MULTIBOMB, SUPERBOMB, ELIMINATION };
+    public enum collisionType {HERO_SHOCKWAVE, HERO_BOMB, ENEMY_SHOCKWAVE, MULTIBOMB, SUPERBOMB, ELIMINATION, HERO_CHERRY };
 
     /**
      * Typ tej konkretnej kolizji.

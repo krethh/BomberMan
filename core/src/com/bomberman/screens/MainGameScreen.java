@@ -75,10 +75,10 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
     /**
      * Odniesienie do głównej klasy gry.
      */
-    private BomberMan game;
+    public BomberMan game;
 
     /**
-     *
+     * Obiekt głównego bohatera.
      */
     public BomberHero hero;
 
@@ -101,6 +101,11 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
      * Tekstura przejścia.
      */
     private Texture passage;
+
+    /**
+     * Tekstura wisienki.
+     */
+    private Texture cherry;
 
     /**
      * Tekstura przeszkody.
@@ -146,6 +151,11 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
      * Licznik sekund. Przydatny przy odliczaniu czasu i wybuchu bomb.
      */
     public long timeCounter;
+
+    /**
+     * Ilość żyć, które ma jeszcze gracz.
+     */
+    public byte heroLives;
 
     /**
      * Lista bomb, które w tej chwili są podłożone.
@@ -283,6 +293,8 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
         timeCounter = 0;
         startTime = System.currentTimeMillis();
 
+        heroLives = 3;
+
         // wypełnij tablicę z wrogami
         String[] enemyPositions = currentMap.enemyPositions.split("\\s");
         enemies = new ArrayList<>();
@@ -312,6 +324,7 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
         multibombInactive = new Texture("img" + File.separator + "multibomba_szara.png");
         superbombInactive = new Texture("img" + File.separator + "superbomba_szara.png");
         enemy = new Texture("img" + File.separator + "enemy.png");
+        cherry = new Texture("img" + File.separator + "cherry.png");
 
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         font = new BitmapFont();
@@ -360,13 +373,6 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
         // narysuj podłożone bomby
         bombsPlanted.stream().forEach(b -> game.batch.draw(bomb, b.x, b.y, TILE_WIDTH, TILE_HEIGHT));
 
-        // dla każdej fali uderzeniowej narysuj tę falę i sprawdź, czy nie ginie bohater
-        activeShockwaves.stream().forEach(s -> {
-            s.shockwavePath.stream().forEach(t -> {
-                game.batch.draw(shockwave, t.getX(), t.getY(), TILE_WIDTH, TILE_HEIGHT);
-            });
-        });
-
         //narysuj superbomby
         superbombTiles.stream().forEach(s -> {
             if(s.type == 'p')
@@ -379,11 +385,24 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
                 game.batch.draw(multibombLetter, m.getX(), m.getY(), TILE_WIDTH, TILE_HEIGHT );
         });
 
+        // narysuj wisienkę
+        BomberTile cherryTile = mapGrid.get(currentMap.cherryPosition);
+        if(cherryTile.type == 'p')
+            game.batch.draw(cherry, cherryTile.getX(), cherryTile.getY(), TILE_WIDTH, TILE_HEIGHT);
+
+        // dla każdej fali uderzeniowej narysuj tę falę i sprawdź, czy nie ginie bohater
+        activeShockwaves.stream().forEach(s -> {
+            s.shockwavePath.stream().forEach(t -> {
+                game.batch.draw(shockwave, t.getX(), t.getY(), TILE_WIDTH, TILE_HEIGHT);
+            });
+        });
+
         // rysuj przeciwników
         enemies.stream().forEach(e -> {
             game.batch.draw(enemy, e.getX(), e.getY(), HERO_SCALING_FACTOR*TILE_WIDTH, HERO_SCALING_FACTOR*TILE_HEIGHT);
         });
 
+        // narysuj napis "PAUZA"
         if(paused)
         {
             font.setColor(Color.BLACK);
@@ -448,6 +467,10 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
         // sprawdź, czy multibomba się nie przeterminowuje
         if(multibombAcquisitionTime + game.bomberConfig.multibombDuration == timeCounter)
             playerHasMultibomb = false;
+
+        // sprawdź, czy gracz może już dostać falą uderzeniową
+        if(hero.lastShockwaveTime + game.bomberConfig.shockwaveRecoveryTime == timeCounter)
+            hero.canBeAffectedByShockwave = true;
 
         // wykonaj ruchy przeciwników
         enemies.stream().forEach(e -> {
@@ -522,7 +545,7 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
             for(int j = 0; j < currentMap.screenWidth; j++)
             {
                 points.add(new BomberTile(
-                        (1 - (float) 100/width )*j*width/currentMap.screenWidth + 100,
+                        (1 - (float) panelWidth/width )*j*width/currentMap.screenWidth + panelWidth,
                         (float) i*height/currentMap.screenHeight,
                         currentMap.mapObjects.charAt(index),
                         this
@@ -543,7 +566,9 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
         font.draw(game.batch, "Czas:", 10, camera.viewportHeight*0.9f);
         font.draw(game.batch, String.valueOf(timeCounter), 10, camera.viewportHeight*0.85f);
         font.draw(game.batch, "Punkty: ", 10, camera.viewportHeight*0.5f);
-        font.draw(game.batch, "0", 10, camera.viewportHeight*0.4f);
+        font.draw(game.batch, String.valueOf(game.points), 10, camera.viewportHeight*0.4f);
+        font.draw(game.batch, "Zycia:", 10, camera.viewportHeight*0.3f);
+        font.draw(game.batch, String.valueOf(heroLives), 10, camera.viewportHeight*0.2f);
 
         game.batch.draw(playerHasSuperbomb ? superbombLetter  : superbombInactive, 0, camera.viewportHeight*0.65f, game.bomberConfig.panelWidth/3, game.bomberConfig.panelWidth/3);
         game.batch.draw(playerHasMultibomb ? multibombLetter  :  multibombInactive, game.bomberConfig.panelWidth/2, camera.viewportHeight*0.65f, game.bomberConfig.panelWidth/3, game.bomberConfig.panelWidth/3);
@@ -568,6 +593,8 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
         if(keycode == Input.Keys.DOWN)
             movesDown = true;
 
+        // wylicza też offset czasowy za wciśnięcia pauzy
+        // po to, żeby bomby nie wybuchały za wcześnie
         if(keycode == Input.Keys.P)
         {
             if(!paused)
@@ -704,7 +731,15 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
 
         if(collision.type == BomberCollision.collisionType.HERO_SHOCKWAVE)
         {
-            game.setScreen(new GameOverScreen(game));
+            if(hero.canBeAffectedByShockwave) {
+                hero.lastShockwaveTime = timeCounter;
+                hero.canBeAffectedByShockwave = false;
+
+                if (heroLives == 1)
+                    game.setScreen(new GameOverScreen(game));
+
+                else heroLives--;
+            }
         }
 
         if(collision.type == BomberCollision.collisionType.MULTIBOMB)
@@ -723,6 +758,16 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
         if(collision.type == BomberCollision.collisionType.ENEMY_SHOCKWAVE)
         {
             ((BomberEnemy) collision.firstObject).die();
+            game.points += 50;
+        }
+
+        if(collision.type == BomberCollision.collisionType.HERO_CHERRY)
+        {
+            game.setScreen(new NextLevelScreen(game));
+            if(timeCounter < 180)
+                game.points += 180 - timeCounter;
+            game.points += heroLives*20;
+            game.points += 100;
         }
     }
 

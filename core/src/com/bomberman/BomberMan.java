@@ -41,6 +41,11 @@ public class BomberMan extends Game {
 	public BomberMap currentMap;
 
 	/**
+	 * Obecna ilość punktów gracza.
+	 */
+	public int points;
+
+	/**
 	 * Główny konstruktor gry.
 	 * @param bomberConfig Obiekt konfiguracyjny, tworzony w klasie DesktopLauncher.
 	 */

@@ -26,6 +26,16 @@ public class BomberHero implements Collidable {
     public boolean isDead;
 
     /**
+     * Mówi, czy gracz może zostać zniszczony przez falę uderzeniową w najbliższym czasie.
+     */
+    public boolean canBeAffectedByShockwave;
+
+    /**
+     * Czas uderzenia ostatniej fali uderzeniowej.
+     */
+    public long lastShockwaveTime;
+
+    /**
      * Główny konstruktor bohatera
      * @param x Współrzędna x.
      * @param y Współrzędna y
@@ -86,19 +96,25 @@ public class BomberHero implements Collidable {
             });
         });
 
-        screen.multibombTiles.stream().forEach(t -> {
+        screen.multibombTiles.stream().filter(t -> t.type == 'p').forEach(t -> {
             if(hasCollisionWith(t))
             {
                 collisions.add(new BomberCollision(this, t, BomberCollision.collisionType.MULTIBOMB));
             }
         });
 
-        screen.superbombTiles.stream().forEach(t -> {
+        screen.superbombTiles.stream().filter(t -> t.type == 'p').forEach(t -> {
             if(hasCollisionWith(t))
             {
                 collisions.add(new BomberCollision(this, t, BomberCollision.collisionType.SUPERBOMB));
             }
         });
+
+        BomberTile cherryTile = screen.mapGrid.get(screen.currentMap.cherryPosition);
+        if(hasCollisionWith(cherryTile) && cherryTile.type == 'p')
+        {
+            collisions.add(new BomberCollision(this, cherryTile, BomberCollision.collisionType.HERO_CHERRY));
+        }
 
         collisions.stream().forEach(c -> {
             c.register(screen);

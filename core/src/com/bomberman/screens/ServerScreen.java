@@ -129,7 +129,8 @@ public class ServerScreen implements Screen, InputProcessor {
      */
     @Override
     public void resize(int width, int height) {
-
+        camera  = new OrthographicCamera(width, height);
+        camera.translate(camera.viewportWidth/2, camera.viewportHeight/2);
     }
 
     /**
