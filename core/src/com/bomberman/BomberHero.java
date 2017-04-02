@@ -116,6 +116,15 @@ public class BomberHero implements Collidable {
             collisions.add(new BomberCollision(this, cherryTile, BomberCollision.collisionType.HERO_CHERRY));
         }
 
+        screen.bombsPlanted.stream().forEach(b -> {
+            BomberTile bombTile = screen.getTile(b.x, b.y);
+            if(hasCollisionWith(bombTile))
+            {
+                collisions.add(new BomberCollision(this, b, BomberCollision.collisionType.HERO_BOMB));
+            }
+
+        });
+
         collisions.stream().forEach(c -> {
             c.register(screen);
             c.notifyObservers();

@@ -6,6 +6,7 @@ import com.bomberman.screens.MainGameScreen;
 import com.sun.istack.internal.Nullable;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Przeciwnik na planszy. Klasa odpowiedzialna za ruch i podkładanie bomb.
@@ -16,6 +17,11 @@ public class BomberEnemy implements Collidable {
      * Odniesienie do głównej klasy gry.
      */
     private BomberMan game;
+
+    /**
+     * Generowanie liczb losowych do randomizowania kierunku poruszania się.
+     */
+    Random random;
 
     /**
      * Współrzędne przeciwnika.
@@ -56,6 +62,7 @@ public class BomberEnemy implements Collidable {
         this.collisionHandler = collisionHandler;
         this.game = game;
         this.screen = screen;
+        random = new Random();
     }
 
     /**
@@ -128,13 +135,13 @@ public class BomberEnemy implements Collidable {
             runAwayFromBomb(b);
         }
 
-        if(collisionHandler.encountersObstacle(x, y))
-        {
-
+        BomberTile t = tryToMove();
+        if(t != null) {
+            if(t.type == 'o')
+                plantBomb();
+            else
+                changeMovingDirection();
         }
-
-        if(!move())
-            changeMovingDirection();
     }
 
     /**
@@ -158,44 +165,44 @@ public class BomberEnemy implements Collidable {
 
     /**
      * Wykonaj ruch
-     * @return false, jeżeli ruch się nie udał.
+     * @return Kafelek, przez który nie może przejść, jeżeli ruch się nie udał.
      */
-    private boolean move()
+    private BomberTile tryToMove()
     {
         float DELTA = Gdx.graphics.getDeltaTime();
 
         if(direction == movingDirection.UP)
         {
-            if(!collisionHandler.cannotPenetrate(x, y + DELTA*screen.ENEMY_SPEED))
+            if(collisionHandler.cannotPenetrate(x, y + DELTA*screen.ENEMY_SPEED) == null)
                 y += DELTA*screen.ENEMY_SPEED;
             else
-                return false;
+                return collisionHandler.cannotPenetrate(x, y + DELTA*screen.ENEMY_SPEED);
         }
 
         else if(direction == movingDirection.DOWN)
         {
-            if(!collisionHandler.cannotPenetrate(x, y - DELTA*screen.ENEMY_SPEED))
+            if(collisionHandler.cannotPenetrate(x, y - DELTA*screen.ENEMY_SPEED) == null)
                 y -= DELTA*screen.ENEMY_SPEED;
             else
-                return false;
+                return collisionHandler.cannotPenetrate(x, y - DELTA*screen.ENEMY_SPEED);
         }
 
         else if(direction == movingDirection.RIGHT)
         {
-            if(!collisionHandler.cannotPenetrate(x + DELTA*screen.ENEMY_SPEED, y))
+            if(collisionHandler.cannotPenetrate(x + DELTA*screen.ENEMY_SPEED, y) == null)
                 x += DELTA*screen.ENEMY_SPEED;
             else
-                return false;
+                return collisionHandler.cannotPenetrate(x + DELTA*screen.ENEMY_SPEED, y);
         }
 
         else if(direction == movingDirection.LEFT)
         {
-            if(!collisionHandler.cannotPenetrate(x - DELTA*screen.ENEMY_SPEED, y))
+            if(collisionHandler.cannotPenetrate(x - DELTA*screen.ENEMY_SPEED, y) == null)
                 x -= DELTA*screen.ENEMY_SPEED;
             else
-                return false;
+                return collisionHandler.cannotPenetrate(x - DELTA*screen.ENEMY_SPEED, y);
         }
-        return true;
+        return null;
     }
 
     /**
@@ -267,33 +274,38 @@ public class BomberEnemy implements Collidable {
         //bomba z lewej górnej strony
         if(b.x - x <= 0 && b.y >= y)
         {
-            if(!collisionHandler.cannotPenetrate(x +DELTA*screen.ENEMY_SPEED, y))
+            if(collisionHandler.cannotPenetrate(x +DELTA*screen.ENEMY_SPEED, y) == null)
                 direction = movingDirection.RIGHT;
-            else if (!collisionHandler.cannotPenetrate(x, y - DELTA*screen.ENEMY_SPEED))
+            else if (collisionHandler.cannotPenetrate(x, y - DELTA*screen.ENEMY_SPEED) == null)
                 direction = movingDirection.DOWN;
-            else
+            else if(random.nextInt(2) == 0)
                 direction = movingDirection.LEFT;
+            else
+                direction = movingDirection.UP;
         }
 
         //bomba z prawej górnej strony
         else if(b.x - x >= 0 && b.y >= y)
         {
-            if(!collisionHandler.cannotPenetrate(x - DELTA*screen.ENEMY_SPEED, y))
+            if(collisionHandler.cannotPenetrate(x - DELTA*screen.ENEMY_SPEED, y) == null)
                 direction = movingDirection.LEFT;
-            else if (!collisionHandler.cannotPenetrate(x, y - DELTA*screen.ENEMY_SPEED))
+            else if (collisionHandler.cannotPenetrate(x, y - DELTA*screen.ENEMY_SPEED) == null)
                 direction = movingDirection.DOWN;
+            else if(random.nextInt(2) == 0)
+                direction = movingDirection.RIGHT;
             else
                 direction = movingDirection.UP;
-
         }
 
         //bomba z lewej dolnej strony
         else if(b.x - x < 0 && b.y < y )
         {
-            if(!collisionHandler.cannotPenetrate(x + DELTA*screen.ENEMY_SPEED, y))
+            if(collisionHandler.cannotPenetrate(x + DELTA*screen.ENEMY_SPEED, y) == null)
                 direction = movingDirection.RIGHT;
-            else if (!collisionHandler.cannotPenetrate(x, y + DELTA*screen.ENEMY_SPEED))
+            else if (collisionHandler.cannotPenetrate(x, y + DELTA*screen.ENEMY_SPEED) == null)
                 direction = movingDirection.UP;
+            else if(random.nextInt(2) == 0)
+                direction = movingDirection.LEFT;
             else
                 direction = movingDirection.DOWN;
         }
@@ -301,12 +313,14 @@ public class BomberEnemy implements Collidable {
         //bomba z prawej dolnej strony
         else if(b.x - x >= 0 && b.y < y)
         {
-            if(!collisionHandler.cannotPenetrate(x - DELTA*screen.ENEMY_SPEED, y))
+            if(collisionHandler.cannotPenetrate(x - DELTA*screen.ENEMY_SPEED, y) == null)
                 direction = movingDirection.LEFT;
-            else if (!collisionHandler.cannotPenetrate(x, y + DELTA*screen.ENEMY_SPEED))
+            else if (collisionHandler.cannotPenetrate(x, y + DELTA*screen.ENEMY_SPEED) == null)
                 direction = movingDirection.UP;
-            else
+            else if(random.nextInt(2) == 0)
                 direction = movingDirection.RIGHT;
+            else
+                direction = movingDirection.DOWN;
         }
     }
 

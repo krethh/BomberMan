@@ -1,11 +1,13 @@
 package com.bomberman;
 
 
+import com.bomberman.interfaces.Collidable;
+
 /**
  * Klasa reprezentująca bombę na planszy.
  * @author Paweł Kulig, Wojciech Sobczak
  */
-public class Bomb {
+public class Bomb implements Collidable {
 
     /**
      * Mówi, czy dana bomba jest superbombą czy normalną bombą.
@@ -48,4 +50,18 @@ public class Bomb {
         this.isPlantedByUser = isPlantedByUser;
     }
 
+    @Override
+    public boolean hasCollisionWith(Collidable other) {
+        return false;
+    }
+
+    @Override
+    public float getX() {
+        return x;
+    }
+
+    @Override
+    public float getY() {
+        return y;
+    }
 }

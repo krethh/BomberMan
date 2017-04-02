@@ -443,19 +443,19 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
         hero.checkCollisions();
         checkExplosions();
         if(movesRight)
-            if(!penetrationHandler.cannotPenetrate(hero.getX() + DELTA*SPEED, hero.getY()))
+            if(penetrationHandler.cannotPenetrate(hero.getX() + DELTA*SPEED, hero.getY()) == null)
                 hero.moveRight();
 
         if(movesLeft)
-            if(!penetrationHandler.cannotPenetrate(hero.getX() - DELTA*SPEED, hero.getY()))
+            if(penetrationHandler.cannotPenetrate(hero.getX() - DELTA*SPEED, hero.getY()) == null)
                 hero.moveLeft();
 
         if(movesUp)
-            if(!penetrationHandler.cannotPenetrate(hero.getX(), hero.getY() + DELTA*SPEED))
+            if(penetrationHandler.cannotPenetrate(hero.getX(), hero.getY() + DELTA*SPEED) == null)
                 hero.moveUp();
 
         if(movesDown)
-            if(!penetrationHandler.cannotPenetrate(hero.getX(), hero.getY() - DELTA*SPEED))
+            if(penetrationHandler.cannotPenetrate(hero.getX(), hero.getY() - DELTA*SPEED) == null)
                 hero.moveDown();
 
         //zniszcz martwych przeciwników
@@ -761,13 +761,30 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
             game.points += 50;
         }
 
+        if(collision.type == BomberCollision.collisionType.HERO_BOMB)
+        {
+            Bomb bomb = (Bomb) collision.secondObject;
+
+            if(movesLeft && Gdx.input.isKeyPressed(Input.Keys.D) && penetrationHandler.cannotPenetrate(bomb.x - DELTA*SPEED, bomb.y) == null)
+                bomb.x -= DELTA*SPEED;
+
+            if(movesRight && Gdx.input.isKeyPressed(Input.Keys.D) && penetrationHandler.cannotPenetrate(bomb.x - DELTA*SPEED, bomb.y) == null)
+                bomb.x += DELTA*SPEED;
+
+            if(movesUp && Gdx.input.isKeyPressed(Input.Keys.D) && penetrationHandler.cannotPenetrate(bomb.x - DELTA*SPEED, bomb.y) == null)
+                bomb.y += DELTA*SPEED;
+
+            if(movesDown && Gdx.input.isKeyPressed(Input.Keys.D) && penetrationHandler.cannotPenetrate(bomb.x - DELTA*SPEED, bomb.y) == null)
+                bomb.y -= DELTA*SPEED;
+        }
+
         if(collision.type == BomberCollision.collisionType.HERO_CHERRY)
         {
-            game.setScreen(new NextLevelScreen(game));
             if(timeCounter < 180)
                 game.points += 180 - timeCounter;
             game.points += heroLives*20;
             game.points += 100;
+            game.setScreen(new NextLevelScreen(game));
         }
     }
 

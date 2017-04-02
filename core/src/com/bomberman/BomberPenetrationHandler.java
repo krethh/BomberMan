@@ -31,33 +31,15 @@ public class BomberPenetrationHandler {
      * @param y Współrzędna y prostokąta enkapsulującego postać.
      * @return False jeżeli postac nie może iść dalej.
      */
-    public boolean cannotPenetrate(float x, float y){
+    public BomberTile cannotPenetrate(float x, float y){
         ArrayList<BomberTile> walls = screen.mapGrid.stream().filter(t -> t.type == 'w' || t.type == 'o').collect(Collectors.toCollection(ArrayList::new));
 
         for(BomberTile t : walls)
         {
             if(haveCollision(x, y, t))
-                return true;
+                return t;
         }
-        return false;
-    }
-
-    /**
-     * Mówi, czy dany prostokąt napotyka na przeszkodą.
-     * @param x Wspołrzędna x lewego dolnego rogu prostokąta.
-     * @param y Wspołrzędna y lewego dolnego rogu prostokąta.
-     * @return true jeżeli napotyka.
-     */
-    public boolean encountersObstacle(float x, float y)
-    {
-        ArrayList<BomberTile> walls = screen.mapGrid.stream().filter(t -> t.type == 'o').collect(Collectors.toCollection(ArrayList::new));
-
-        for (BomberTile t : walls)
-        {
-            if(haveCollision(x, y, t))
-                return true;
-        }
-        return false;
+        return null;
     }
 
     /**
