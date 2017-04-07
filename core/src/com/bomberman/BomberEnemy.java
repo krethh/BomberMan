@@ -26,7 +26,7 @@ public class BomberEnemy implements Collidable {
     /**
      * Współrzędne przeciwnika.
      */
-    private float x, y;
+    public float x, y;
 
     /**
      * Czas, kiedy przeciwnik podłożył swoją ostatnią bombę.

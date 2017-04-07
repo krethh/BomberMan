@@ -8,6 +8,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.bomberman.BomberMan;
+import com.bomberman.BomberMap;
+
+import java.io.IOException;
 
 /**
  * Ekran wyboru poziomu.
@@ -30,18 +33,12 @@ public class ChooseLevelScreen implements com.badlogic.gdx.Screen, InputProcesso
     private BitmapFont font;
 
     /**
-     * Poziom wybrany przez gracza.
-     */
-    private short levelChosen;
-
-    /**
      * Konstruktor ekranu
      * @param game Główny obiekt gry
      */
     public ChooseLevelScreen(BomberMan game)
     {
         this.game = game;
-        levelChosen = 1;
 
         Gdx.input.setInputProcessor(this);
     }
@@ -74,7 +71,7 @@ public class ChooseLevelScreen implements com.badlogic.gdx.Screen, InputProcesso
         font.getData().setScale(3, 3);
 
         font.draw(game.batch, "Podaj poziom gry:", Gdx.graphics.getWidth()/3, Gdx.graphics.getHeight()*0.8f);
-        font.draw(game.batch, String.valueOf(levelChosen), Gdx.graphics.getWidth()/3, Gdx.graphics.getHeight()*0.5f);
+        font.draw(game.batch, String.valueOf(game.difficultyLevel), Gdx.graphics.getWidth()/3, Gdx.graphics.getHeight()*0.5f);
         game.batch.end();
     }
 
@@ -134,19 +131,23 @@ public class ChooseLevelScreen implements com.badlogic.gdx.Screen, InputProcesso
         }
         if(keycode == Input.Keys.ENTER)
         {
-            game.setScreen(new MainGameScreen(game, game.bomberConfig.maps.get(0), levelChosen));
+            try {
+                game.setScreen(new MainGameScreen(game, new BomberMap(game.bomberConfig.mapNames.get(0)), game.difficultyLevel));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         if(keycode == Input.Keys.NUM_1)
         {
-            levelChosen = 1;
+            game.difficultyLevel = 1;
         }
         if(keycode == Input.Keys.NUM_2)
         {
-            levelChosen = 2;
+            game.difficultyLevel = 2;
         }
         if(keycode == Input.Keys.NUM_3)
         {
-            levelChosen = 3;
+            game.difficultyLevel = 3;
         }
         return true;
     }

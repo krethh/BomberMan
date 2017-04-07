@@ -35,12 +35,12 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
     /**
      * Szybkość przemieszczania się gracza.
      */
-    public final float SPEED;
+    public float SPEED;
 
     /**
      * Szybkośc poruszania się przeciwników.
      */
-    public final float ENEMY_SPEED;
+    public float ENEMY_SPEED;
 
     /**
      * Lista przechowująca przeciwników bombera.
@@ -491,6 +491,43 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
     @Override
     public void resize(int width, int height) {
 
+
+        camera  = new OrthographicCamera(width, height);
+        camera.translate(camera.viewportWidth/2, camera.viewportHeight/2);
+
+        mapGrid = generateGrid(width, height);
+
+        float newHeight = height/currentMap.screenHeight;
+        float newWidth = (width - game.bomberConfig.panelWidth)/currentMap.screenWidth;
+
+        // dostosuj pozycje obiektów w pionie
+        hero.y *= newHeight/TILE_HEIGHT;
+        bombsPlanted.stream().forEach(b -> b.y *= newHeight/TILE_HEIGHT);
+        enemies.stream().forEach(e -> e.y *= newHeight/TILE_HEIGHT);
+
+        // dostosuj pozycje obiektów w poziomie
+        hero.x -= game.bomberConfig.panelWidth;
+        hero.x *= newWidth/TILE_WIDTH;
+        hero.x += game.bomberConfig.panelWidth;
+
+        bombsPlanted.stream().forEach(b -> {
+            b.x -= game.bomberConfig.panelWidth;
+            b.x *= newWidth/TILE_WIDTH;
+            b.x += game.bomberConfig.panelWidth;
+        });
+
+        enemies.stream().forEach(e -> {
+            e.x -= game.bomberConfig.panelWidth;
+            e.x *= newWidth/TILE_WIDTH;
+            e.x += game.bomberConfig.panelWidth;
+        });
+
+        TILE_HEIGHT = newHeight;
+        TILE_WIDTH = newWidth;
+
+        SPEED = game.bomberConfig.speed*Gdx.graphics.getWidth()/800;
+        ENEMY_SPEED = 1.1f*SPEED;
+
     }
 
     /**
@@ -537,20 +574,37 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
      */
     private ArrayList<BomberTile> generateGrid(float width, float height)
     {
-        ArrayList<BomberTile> points = new ArrayList<>();
+        // jeżeli jest to pierwsze wywołanie funkcji to stwórz listę na nowo
+        // w przeciwnym razie tylko zmodyfikuj istniejącą, żeby nie niszczyć starych kafelków
+        boolean firstGo = false;
+
+        ArrayList<BomberTile> points;
+
+        if(firstGo = (mapGrid == null))
+            points = new ArrayList<>();
+        else
+            points = mapGrid;
+
         int panelWidth = game.bomberConfig.panelWidth;
 
         int index = 0;
         for(int i = 0; i < currentMap.screenHeight; i++)
             for(int j = 0; j < currentMap.screenWidth; j++)
             {
-                points.add(new BomberTile(
-                        (1 - (float) panelWidth/width )*j*width/currentMap.screenWidth + panelWidth,
-                        (float) i*height/currentMap.screenHeight,
-                        currentMap.mapObjects.charAt(index),
-                        this
-                ));
-                index++;
+                if(firstGo) {
+                    points.add(new BomberTile(
+                            (1 - (float) panelWidth / width) * j * width / currentMap.screenWidth + panelWidth,
+                            (float) i * height / currentMap.screenHeight,
+                            currentMap.mapObjects.charAt(index),
+                            this
+                    ));
+                    index++;
+                }
+
+                else{
+                    points.get(i*currentMap.screenHeight + j).x = (1 - (float) panelWidth / width) * j * width / currentMap.screenWidth + panelWidth;
+                    points.get(i*currentMap.screenHeight + j).y =(float) i * height / currentMap.screenHeight;
+                }
             }
         return points;
     }

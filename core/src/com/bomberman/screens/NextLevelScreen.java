@@ -1,18 +1,23 @@
 package com.bomberman.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.bomberman.BomberMan;
+import com.bomberman.BomberMap;
 import com.sun.org.apache.xpath.internal.operations.Or;
+
+import java.io.IOException;
 
 /**
  * Created by Wojtek on 21.03.2017.
  */
-public class NextLevelScreen implements Screen {
+public class NextLevelScreen implements Screen, InputProcessor {
 
     /**
      * Odniesienie do głównego obiektu gry.
@@ -39,6 +44,8 @@ public class NextLevelScreen implements Screen {
 
         //update najwyższego wyniku gracza
         game.highScoresManager.setScoreIfBetter(game.nick, game.points);
+
+        Gdx.input.setInputProcessor(this);
     }
 
     /**
@@ -114,5 +121,106 @@ public class NextLevelScreen implements Screen {
     @Override
     public void dispose() {
 
+    }
+
+    /**
+     * Handler wciśnięcia przycisku.
+     * @param keycode Kod przycisku.
+     * @return True, jeżeli sukces.
+     */
+    @Override
+    public boolean keyDown(int keycode) {
+        if(keycode == Input.Keys.ESCAPE)
+        {
+            game.setScreen(new MainMenuScreen(game));
+        }
+        if(keycode == Input.Keys.ENTER)
+        {
+            try {
+                game.setScreen(new MainGameScreen(game, new BomberMap(game.bomberConfig.mapNames.get(++game.currentMap)), game.difficultyLevel));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Handler podniesienia przycisku
+     * @param keycode Kod przycisku
+     * @return True, jeżeli sukces.
+     */
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    /**
+     * Do obsługi znaków z klawiatury.
+     * @param character Wprowadzony znak.
+     * @return True jeżeli sukces.
+     */
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    /**
+     * Do obsługi ekranów dotykowych, nieużywany.
+     * @param screenX
+     * @param screenY
+     * @param pointer
+     * @param button
+     * @return
+     */
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    /**
+     * Do obsługi ekranów dotykowych, nieużywany.
+     * @param screenX
+     * @param screenY
+     * @param pointer
+     * @param button
+     * @return
+     */
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    /**
+     * Do obsługi ekranów dotykowych, nieużywany.
+     * @param screenX
+     * @param screenY
+     * @param pointer
+     * @return
+     */
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    /**
+     * Handler poruszenia myszką, nieużywany.
+     * @param screenX
+     * @param screenY
+     * @return
+     */
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    /**
+     * Handler scrollowania, nieużywany.
+     * @param amount
+     * @return
+     */
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
     }
 }

@@ -7,5 +7,5 @@ multibombPositions=100
 superbombPositions=18 21 35
 cherryPosition=125
 eliminationPosition=120
-enemyPositions=78 123 181 
+enemyPositions=78 123 150
 heroPosition=17

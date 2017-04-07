@@ -41,14 +41,19 @@ public class BomberMan extends Game {
 	public String nick;
 
 	/**
-	 * Mapa, która obecnie jest grana.
+	 * Indeks mapy, która obecnie jest grana.
 	 */
-	public BomberMap currentMap;
+	public short currentMap;
 
 	/**
 	 * Obecna ilość punktów gracza.
 	 */
 	public int points;
+
+	/**
+	 * Poziom trudności, na którym gra gracz.
+	 */
+	public short difficultyLevel;
 
 	/**
 	 * Główny konstruktor gry.
@@ -58,7 +63,7 @@ public class BomberMan extends Game {
 	{
 		this.bomberConfig = bomberConfig;
 		this.highScoresManager = highScoresManager;
-		currentMap = null;
+		difficultyLevel = 1;
 	}
 
 	@Override

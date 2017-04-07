@@ -53,7 +53,7 @@ public class BomberConfig {
     /**
      * Lista map zdefiniowanych w folderze /maps.
      */
-    public final ArrayList<BomberMap> maps;
+    public final ArrayList<String> mapNames;
 
     /**
      * Szybkość postaci gracza.
@@ -94,11 +94,11 @@ public class BomberConfig {
 
         /// przeszukaj folder maps w celu załadowania wszystkich map do obiektu konfiguracyjnego
         ArrayList<String> mapPaths = DirectoryUtils.findFilesWithExtension("maps", ".mapconfig");
-        maps = new ArrayList<BomberMap>();
+        mapNames = new ArrayList<String>();
 
         for(String mapPath : mapPaths)
         {
-            maps.add(new BomberMap(mapPath));
+            mapNames.add(mapPath);
         }
 
     }

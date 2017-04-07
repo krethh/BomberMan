@@ -16,12 +16,12 @@ public class BomberTile implements Collidable, ExplosionObserver {
     /**
      * Współrzędna x lewego dolnego rogu kafelka.
      */
-    private final float x;
+    public float x;
 
     /**
      * Współrzędna y lewego dolnego rogu kafelka.
      */
-    private final float y;
+    public float y;
 
     /**
      * Typ kafelka; p - przejście, o - przeszkoda, w - ściana

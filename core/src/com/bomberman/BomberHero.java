@@ -18,7 +18,7 @@ public class BomberHero implements Collidable {
     /**
      * Współrzędne bohatera.
      */
-    private float x, y;
+    public float x, y;
 
     /**
      * Mówi, czy bohater zginął.
