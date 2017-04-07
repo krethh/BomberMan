@@ -8,22 +8,11 @@
   <component name="ChangeListManager">
     <list default="true" id="3c9cbd65-9a3d-4483-b279-40b1046aa6fd" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/desktop_jar/desktop.jar" afterPath="$PROJECT_DIR$/out/artifacts/desktop_jar/desktop.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/core/com/bomberman/BomberConfig.class" afterPath="$PROJECT_DIR$/out/production/core/com/bomberman/BomberConfig.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/core/com/bomberman/BomberMan.class" afterPath="$PROJECT_DIR$/out/production/core/com/bomberman/BomberMan.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/core/com/bomberman/screens/ChooseLevelScreen.class" afterPath="$PROJECT_DIR$/out/production/core/com/bomberman/screens/ChooseLevelScreen.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/core/com/bomberman/screens/NextLevelScreen.class" afterPath="$PROJECT_DIR$/out/production/core/com/bomberman/screens/NextLevelScreen.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/core/com/bomberman/screens/MainGameScreen.class" afterPath="$PROJECT_DIR$/out/production/core/com/bomberman/screens/MainGameScreen.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BomberMan.iws" afterPath="$PROJECT_DIR$/BomberMan.iws" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/assets/highscores.config" afterPath="$PROJECT_DIR$/core/assets/highscores.config" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/assets/maps/map1.mapconfig" afterPath="$PROJECT_DIR$/core/assets/maps/map1.mapconfig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/assets/maps/map2.mapconfig" afterPath="$PROJECT_DIR$/core/assets/maps/map2.mapconfig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/com/bomberman/BomberConfig.java" afterPath="$PROJECT_DIR$/core/src/com/bomberman/BomberConfig.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/com/bomberman/BomberEnemy.java" afterPath="$PROJECT_DIR$/core/src/com/bomberman/BomberEnemy.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/com/bomberman/BomberHero.java" afterPath="$PROJECT_DIR$/core/src/com/bomberman/BomberHero.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/com/bomberman/BomberMan.java" afterPath="$PROJECT_DIR$/core/src/com/bomberman/BomberMan.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/com/bomberman/BomberTile.java" afterPath="$PROJECT_DIR$/core/src/com/bomberman/BomberTile.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/com/bomberman/screens/ChooseLevelScreen.java" afterPath="$PROJECT_DIR$/core/src/com/bomberman/screens/ChooseLevelScreen.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/assets/maps/map3.mapconfig" afterPath="$PROJECT_DIR$/core/assets/maps/map3.mapconfig" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/com/bomberman/screens/MainGameScreen.java" afterPath="$PROJECT_DIR$/core/src/com/bomberman/screens/MainGameScreen.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/core/src/com/bomberman/screens/NextLevelScreen.java" afterPath="$PROJECT_DIR$/core/src/com/bomberman/screens/NextLevelScreen.java" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -84,21 +73,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="MainGameScreen.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MainGameScreen.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/src/com/bomberman/screens/MainGameScreen.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2290">
-              <caret line="577" column="93" lean-forward="false" selection-start-line="577" selection-start-column="93" selection-end-line="577" selection-end-column="93" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BomberTile.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/com/bomberman/BomberTile.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="117">
-              <caret line="14" column="0" lean-forward="true" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+            <state relative-caret-position="284">
+              <caret line="839" column="72" lean-forward="true" selection-start-line="839" selection-start-column="72" selection-end-line="839" selection-end-column="72" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -106,99 +85,36 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BomberEnemy.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/com/bomberman/BomberEnemy.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-4661">
-              <caret line="28" column="10" lean-forward="false" selection-start-line="28" selection-start-column="10" selection-end-line="28" selection-end-column="10" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BomberHero.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/com/bomberman/BomberHero.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="20" column="10" lean-forward="false" selection-start-line="20" selection-start-column="10" selection-end-line="20" selection-end-column="10" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MainMenuScreen.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/com/bomberman/screens/MainMenuScreen.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="187" column="8" lean-forward="true" selection-start-line="187" selection-start-column="8" selection-end-line="191" selection-end-column="49" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BomberMan.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/com/bomberman/BomberMan.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="320">
-              <caret line="65" column="28" lean-forward="false" selection-start-line="65" selection-start-column="28" selection-end-line="65" selection-end-column="28" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ChooseLevelScreen.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/com/bomberman/screens/ChooseLevelScreen.java">
+      <file leaf-file-name="GameCompleteScreen.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/core/src/com/bomberman/screens/GameCompleteScreen.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="391">
-              <caret line="33" column="0" lean-forward="false" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+              <caret line="23" column="34" lean-forward="true" selection-start-line="23" selection-start-column="34" selection-end-line="23" selection-end-column="34" />
               <folding>
-                <element signature="e#3886#3887#0" expanded="false" />
-                <element signature="e#3914#3915#0" expanded="false" />
-                <element signature="e#4107#4108#0" expanded="false" />
-                <element signature="e#4134#4135#0" expanded="false" />
-                <element signature="e#4399#4400#0" expanded="false" />
-                <element signature="e#4427#4428#0" expanded="false" />
-                <element signature="e#4690#4691#0" expanded="false" />
-                <element signature="e#4718#4719#0" expanded="false" />
-                <element signature="e#4953#4954#0" expanded="false" />
-                <element signature="e#4981#4982#0" expanded="false" />
-                <element signature="e#5175#5176#0" expanded="false" />
-                <element signature="e#5203#5204#0" expanded="false" />
-                <element signature="e#5353#5354#0" expanded="false" />
-                <element signature="e#5381#5382#0" expanded="false" />
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ManualScreen.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/com/bomberman/screens/ManualScreen.java">
+      <file leaf-file-name="NextLevelScreen.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/src/com/bomberman/screens/NextLevelScreen.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3128">
-              <caret line="206" column="5" lean-forward="false" selection-start-line="115" selection-start-column="4" selection-end-line="206" selection-end-column="5" />
+            <state relative-caret-position="677">
+              <caret line="224" column="5" lean-forward="true" selection-start-line="21" selection-start-column="3" selection-end-line="224" selection-end-column="5" />
               <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#3187#3188#0" expanded="false" />
-                <element signature="e#3215#3216#0" expanded="false" />
-                <element signature="e#3408#3409#0" expanded="false" />
-                <element signature="e#3436#3437#0" expanded="false" />
-                <element signature="e#3701#3702#0" expanded="false" />
-                <element signature="e#3729#3730#0" expanded="false" />
-                <element signature="e#3992#3993#0" expanded="false" />
-                <element signature="e#4020#4021#0" expanded="false" />
-                <element signature="e#4255#4256#0" expanded="false" />
-                <element signature="e#4283#4284#0" expanded="false" />
-                <element signature="e#4477#4478#0" expanded="false" />
-                <element signature="e#4505#4506#0" expanded="false" />
-                <element signature="e#4655#4656#0" expanded="false" />
-                <element signature="e#4683#4684#0" expanded="false" />
+                <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HighScoreScreen.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/src/com/bomberman/screens/HighScoreScreen.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="324">
+              <caret line="68" column="32" lean-forward="true" selection-start-line="68" selection-start-column="32" selection-end-line="68" selection-end-column="32" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -233,6 +149,7 @@
       <find>rendergam</find>
       <find>resize</find>
       <find>canB</find>
+      <find>nex</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -275,9 +192,10 @@
         <option value="$PROJECT_DIR$/core/src/com/bomberman/BomberMan.java" />
         <option value="$PROJECT_DIR$/core/src/com/bomberman/screens/NextLevelScreen.java" />
         <option value="$PROJECT_DIR$/core/src/com/bomberman/BomberHero.java" />
-        <option value="$PROJECT_DIR$/core/src/com/bomberman/BomberEnemy.java" />
         <option value="$PROJECT_DIR$/core/src/com/bomberman/BomberTile.java" />
+        <option value="$PROJECT_DIR$/core/src/com/bomberman/BomberEnemy.java" />
         <option value="$PROJECT_DIR$/core/src/com/bomberman/screens/MainGameScreen.java" />
+        <option value="$PROJECT_DIR$/core/src/com/bomberman/screens/GameCompleteScreen.java" />
       </list>
     </option>
   </component>
@@ -751,7 +669,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1592" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -769,12 +687,12 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19010417" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19010417" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33932346" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20613107" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -792,7 +710,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="60" />
+      <option name="time" value="63" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -801,14 +719,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/core/src/com/bomberman/screens/MainGameScreen.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_111/src.zip!/java/util/ArrayList.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1785">
@@ -1006,13 +916,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/com/bomberman/screens/HighScoreScreen.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="71" column="120" lean-forward="true" selection-start-line="67" selection-start-column="7" selection-end-line="71" selection-end-column="120" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/src/com/bomberman/BomberExplosion.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
@@ -1099,16 +1002,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/com/bomberman/BomberPenetrationHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="35" column="0" lean-forward="true" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/src/com/bomberman/BomberMap.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-867">
@@ -1172,32 +1065,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/com/bomberman/screens/NextLevelScreen.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="139" column="82" lean-forward="false" selection-start-line="139" selection-start-column="82" selection-end-line="139" selection-end-column="82" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3818#3819#0" expanded="true" />
-            <element signature="e#3846#3847#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/com/bomberman/BomberHero.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="20" column="10" lean-forward="false" selection-start-line="20" selection-start-column="10" selection-end-line="20" selection-end-column="10" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/src/com/bomberman/BomberMan.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="320">
-          <caret line="65" column="28" lean-forward="false" selection-start-line="65" selection-start-column="28" selection-end-line="65" selection-end-column="28" />
+        <state relative-caret-position="334">
+          <caret line="25" column="24" lean-forward="false" selection-start-line="25" selection-start-column="24" selection-end-line="25" selection-end-column="24" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1214,8 +1085,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/core/src/com/bomberman/BomberEnemy.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4661">
-          <caret line="28" column="10" lean-forward="false" selection-start-line="28" selection-start-column="10" selection-end-line="28" selection-end-column="10" />
+        <state relative-caret-position="101">
+          <caret line="117" column="5" lean-forward="false" selection-start-line="117" selection-start-column="5" selection-end-line="117" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/com/bomberman/BomberPenetrationHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="201">
+          <caret line="33" column="22" lean-forward="false" selection-start-line="33" selection-start-column="22" selection-end-line="33" selection-end-column="22" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1232,11 +1113,51 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/com/bomberman/BomberHero.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="20" column="10" lean-forward="false" selection-start-line="20" selection-start-column="10" selection-end-line="20" selection-end-column="10" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/com/bomberman/screens/NextLevelScreen.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="677">
+          <caret line="224" column="5" lean-forward="true" selection-start-line="21" selection-start-column="3" selection-end-line="224" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/com/bomberman/screens/HighScoreScreen.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="68" column="32" lean-forward="true" selection-start-line="68" selection-start-column="32" selection-end-line="68" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/core/src/com/bomberman/screens/MainGameScreen.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2290">
-          <caret line="577" column="93" lean-forward="false" selection-start-line="577" selection-start-column="93" selection-end-line="577" selection-end-column="93" />
-          <folding />
+        <state relative-caret-position="284">
+          <caret line="839" column="72" lean-forward="true" selection-start-line="839" selection-start-column="72" selection-end-line="839" selection-end-column="72" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/com/bomberman/screens/GameCompleteScreen.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="23" column="34" lean-forward="true" selection-start-line="23" selection-start-column="34" selection-end-line="23" selection-end-column="34" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

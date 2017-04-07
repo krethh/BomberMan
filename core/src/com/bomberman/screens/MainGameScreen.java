@@ -1,9 +1,7 @@
 package com.bomberman.screens;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -12,9 +10,14 @@ import com.badlogic.gdx.graphics.*;
 import com.bomberman.*;
 import com.bomberman.interfaces.CollisionObserver;
 
+import java.awt.*;
 import java.io.File;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
+
+import static com.badlogic.gdx.Gdx.graphics;
+import static com.badlogic.gdx.Gdx.input;
 
 
 /**
@@ -258,18 +261,18 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
 
         this.game = game;
         currentMap = map;
-        mapGrid = generateGrid(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        mapGrid = generateGrid(graphics.getWidth(), graphics.getHeight());
 
         // przeskalowanie prędkości, w stosunku do rozmiaru okna
-        SPEED = game.bomberConfig.speed*Gdx.graphics.getWidth()/800;
+        SPEED = game.bomberConfig.speed* graphics.getWidth()/800;
 
         // przeciwnicy są trochę szybsi, żeby kompensować za ich głupotę
         ENEMY_SPEED = 1.1f*SPEED;
 
         this.difficulty = difficulty;
 
-        TILE_HEIGHT =  Gdx.graphics.getHeight()/currentMap.screenHeight;
-        TILE_WIDTH = (Gdx.graphics.getWidth() - game.bomberConfig.panelWidth)/currentMap.screenWidth;
+        TILE_HEIGHT =  graphics.getHeight()/currentMap.screenHeight;
+        TILE_WIDTH = (graphics.getWidth() - game.bomberConfig.panelWidth)/currentMap.screenWidth;
 
         hero = new BomberHero(mapGrid.get(currentMap.heroPosition).getX(), mapGrid.get(currentMap.heroPosition).getY(), this);
 
@@ -326,7 +329,7 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
         enemy = new Texture("img" + File.separator + "enemy.png");
         cherry = new Texture("img" + File.separator + "cherry.png");
 
-        camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera = new OrthographicCamera(graphics.getWidth(), graphics.getHeight());
         font = new BitmapFont();
         camera.translate(camera.viewportWidth/2, camera.viewportHeight/2);
     }
@@ -337,10 +340,9 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
      */
     @Override
     public void render(float delta) {
-        DELTA = Gdx.graphics.getDeltaTime();
+        DELTA = graphics.getDeltaTime();
 
-        if(!paused)
-            update();
+        update();
 
         // ustaw białe tło
         Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -407,7 +409,7 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
         {
             font.setColor(Color.BLACK);
             font.getData().setScale(3, 3);
-            font.draw(game.batch, "PAUZA", Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+            font.draw(game.batch, "PAUZA", graphics.getWidth()/2, graphics.getHeight()/2);
         }
 
         renderGamePanel();
@@ -438,6 +440,9 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
      */
     private void update()
     {
+        if(paused)
+            return;
+
         timeCounter = (long) (System.currentTimeMillis() - pauseOffset - startTime)/1000;
 
         hero.checkCollisions();
@@ -490,8 +495,6 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
      */
     @Override
     public void resize(int width, int height) {
-
-
         camera  = new OrthographicCamera(width, height);
         camera.translate(camera.viewportWidth/2, camera.viewportHeight/2);
 
@@ -520,14 +523,18 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
             e.x -= game.bomberConfig.panelWidth;
             e.x *= newWidth/TILE_WIDTH;
             e.x += game.bomberConfig.panelWidth;
+
+            /// ustawia przeciwnika na środku kafelka, żeby się nie zacinał
+            BomberTile t = getTile(e.x, e.y);
+            e.x = t.x;
+            e.y = t.y;
         });
 
         TILE_HEIGHT = newHeight;
         TILE_WIDTH = newWidth;
 
-        SPEED = game.bomberConfig.speed*Gdx.graphics.getWidth()/800;
+        SPEED = game.bomberConfig.speed* graphics.getWidth()/800;
         ENEMY_SPEED = 1.1f*SPEED;
-
     }
 
     /**
@@ -651,16 +658,7 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
         // po to, żeby bomby nie wybuchały za wcześnie
         if(keycode == Input.Keys.P)
         {
-            if(!paused)
-            {
-                pauseTime = System.currentTimeMillis();
-                paused = true;
-            }
-            else
-            {
-                pauseOffset += System.currentTimeMillis() - pauseTime;
-                paused = false;
-            }
+            togglePause();
         }
 
         //podłożenie bomby
@@ -763,7 +761,7 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
      */
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        return false;
+        return true;
     }
 
     /**
@@ -838,7 +836,12 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
                 game.points += 180 - timeCounter;
             game.points += heroLives*20;
             game.points += 100;
-            game.setScreen(new NextLevelScreen(game));
+
+            if(game.currentMap != game.bomberConfig.mapNames.size() - 1)
+                game.setScreen(new NextLevelScreen(game));
+
+            else
+                game.setScreen(new GameCompleteScreen(game));
         }
     }
 
@@ -862,4 +865,22 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
             }
         });
     }
+
+    /**
+     * Obsługuje włączanie pauzy.
+     */
+    private void togglePause()
+    {
+        if(!paused)
+        {
+            pauseTime = System.currentTimeMillis();
+            paused = true;
+        }
+        else
+        {
+            pauseOffset += System.currentTimeMillis() - pauseTime;
+            paused = false;
+        }
+    }
+
 }
