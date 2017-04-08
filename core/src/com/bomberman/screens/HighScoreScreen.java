@@ -9,6 +9,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.bomberman.BomberMan;
+import com.bomberman.HighScoresManager;
+
+import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * Ekran najwyższych wyników.
@@ -31,12 +35,25 @@ public class HighScoreScreen implements Screen, InputProcessor {
     private BitmapFont font;
 
     /**
+     * Haszmapa wyświetlanych stringów.
+     */
+    private HashMap<String, String> stringsDisplayed;
+
+
+    /**
      * Konstruktor ekranu.
      * @param game Odniesienie do głównego obiektu gry.
      */
     public HighScoreScreen(BomberMan game)
     {
         this.game = game;
+        try {
+            game.highScoresManager = new HighScoresManager();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        stringsDisplayed = getStringsToDisplay();
     }
 
     /**
@@ -68,10 +85,47 @@ public class HighScoreScreen implements Screen, InputProcessor {
         font.setColor(Color.BLACK);
         font.getData().setScale(3, 3);
 
-        font.draw(game.batch, "Narazie nic tu nie ma.", Gdx.graphics.getWidth()/3 , Gdx.graphics.getHeight()/2);
-        font.draw(game.batch, "Wciśnij ESC żeby powrócić", Gdx.graphics.getWidth()/3 , Gdx.graphics.getHeight()/2 + 50);
+        displayHighScoresList();
         game.batch.end();
 
+    }
+
+    /**
+     * Wyświetla listę najlepszych wyników, posortowaną od najwyższego.
+     */
+    private void displayHighScoresList()
+    {
+        font.draw(game.batch, "Najlepsze wyniki:", camera.viewportWidth/3, camera.viewportHeight*0.9f);
+
+        font.getData().setScale(2, 2);
+        float offset = 10f;
+
+        for(String key : stringsDisplayed.keySet())
+        {
+            font.draw(game.batch, key, camera.viewportWidth/4, camera.viewportHeight*0.1f + camera.viewportHeight*0.07f*offset  );
+            font.draw(game.batch, stringsDisplayed.get(key), camera.viewportWidth*0.75f,camera.viewportHeight*0.1f + camera.viewportHeight*0.07f*offset );
+            offset--;
+        }
+    }
+
+    /**
+     * Zwraca listę stringów, które mają być wyświetlone.
+     * @return Haszmapa, klucz - nick, wartość - wynik.
+     */
+    private HashMap<String, String> getStringsToDisplay()
+    {
+        HashMap<Integer, String> highScores = game.highScoresManager.getHighScores();
+        HashMap<String, String> strings = new HashMap<>();
+
+        for(int i = 0; i < 10; i++)
+        {
+            if(!highScores.containsKey(i))
+                break;
+
+            strings.put(String.valueOf(highScores.get(i)), String.valueOf(game.highScoresManager.getScore(highScores.get(i))));
+        }
+
+        return strings;
     }
 
     /**

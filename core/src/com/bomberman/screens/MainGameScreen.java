@@ -624,12 +624,12 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
         font.setColor(Color.BLACK);
         font.getData().setScale(2, 2);
 
-        font.draw(game.batch, "Czas:", 10, camera.viewportHeight*0.9f);
+        font.draw(game.batch, "Czas:", 5, camera.viewportHeight*0.9f);
         font.draw(game.batch, String.valueOf(timeCounter), 10, camera.viewportHeight*0.85f);
-        font.draw(game.batch, "Punkty: ", 10, camera.viewportHeight*0.5f);
+        font.draw(game.batch, "Punkty: ", 5, camera.viewportHeight*0.5f);
         font.draw(game.batch, String.valueOf(game.points), 10, camera.viewportHeight*0.4f);
-        font.draw(game.batch, "Zycia:", 10, camera.viewportHeight*0.3f);
-        font.draw(game.batch, String.valueOf(heroLives), 10, camera.viewportHeight*0.2f);
+        font.draw(game.batch, "Zycia:", 5, camera.viewportHeight*0.3f);
+        font.draw(game.batch, String.valueOf(heroLives), 5, camera.viewportHeight*0.2f);
 
         game.batch.draw(playerHasSuperbomb ? superbombLetter  : superbombInactive, 0, camera.viewportHeight*0.65f, game.bomberConfig.panelWidth/3, game.bomberConfig.panelWidth/3);
         game.batch.draw(playerHasMultibomb ? multibombLetter  :  multibombInactive, game.bomberConfig.panelWidth/2, camera.viewportHeight*0.65f, game.bomberConfig.panelWidth/3, game.bomberConfig.panelWidth/3);
