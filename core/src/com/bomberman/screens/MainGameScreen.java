@@ -357,15 +357,15 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
         mapGrid.stream().forEach(p -> {
             if(p.type == 'w')
             {
-                game.batch.draw(wall, p.getX(), p.getY(), TILE_WIDTH, TILE_HEIGHT);
+                game.batch.draw(wall, p.getX(), p.getY(), 1.01f*TILE_WIDTH, 1.01f*TILE_HEIGHT);
             }
             if(p.type == 'o')
             {
-                game.batch.draw(obstacle, p.getX(), p.getY(), TILE_WIDTH, TILE_HEIGHT);
+                game.batch.draw(obstacle, p.getX(), p.getY(), 1.01f*TILE_WIDTH, 1.01f*TILE_HEIGHT);
             }
             if(p.type == 'p')
             {
-                game.batch.draw(passage, p.getX(), p.getY(), TILE_WIDTH, TILE_HEIGHT);
+                game.batch.draw(passage, p.getX(), p.getY(), 1.01f*TILE_WIDTH, 1.01f*TILE_HEIGHT);
             }
         });
 

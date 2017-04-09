@@ -38,6 +38,9 @@ public class GameCompleteScreen implements Screen, InputProcessor {
     {
         this.game = game;
 
+        //update najwyższego wyniku gracza
+        game.highScoresManager.setScoreIfBetter(game.nick, game.points);
+
         Gdx.input.setInputProcessor(this);
     }
 

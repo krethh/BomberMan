@@ -7,8 +7,11 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.bomberman.BomberMan;
+
+import java.io.File;
 
 /**
  * Ekran instrukcji dla gracza.
@@ -25,7 +28,10 @@ public class ManualScreen implements Screen, InputProcessor {
      */
     private OrthographicCamera camera;
 
-    private BitmapFont font;
+    /**
+     * Tekstura instrukcji.
+     */
+    private Texture manual;
 
     /**
      * Konstruktor ekranu
@@ -43,7 +49,7 @@ public class ManualScreen implements Screen, InputProcessor {
      */
     @Override
     public void show() {
-        font = new BitmapFont();
+        manual = new Texture("img" + File.separator + "manual.png");
         camera  = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.translate(camera.viewportWidth/2, camera.viewportHeight/2);
     }
@@ -62,11 +68,9 @@ public class ManualScreen implements Screen, InputProcessor {
 
         game.batch.begin();
         game.batch.setProjectionMatrix(camera.combined);
-        font.setColor(Color.BLACK);
-        font.getData().setScale(3, 3);
 
-        font.draw(game.batch, "Narazie nic tu nie ma.", Gdx.graphics.getWidth()/3 , Gdx.graphics.getHeight()/2);
-        font.draw(game.batch, "Wciśnij ESC żeby powrócić", Gdx.graphics.getWidth()/3 , Gdx.graphics.getHeight()/2 + 50);
+        game.batch.draw(manual, camera.viewportWidth/2 - 400, camera.viewportHeight/2 - 300, 800, 600);
+
         game.batch.end();
     }
 
