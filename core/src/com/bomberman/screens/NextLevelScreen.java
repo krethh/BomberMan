@@ -137,7 +137,13 @@ public class NextLevelScreen implements Screen, InputProcessor {
         if(keycode == Input.Keys.ENTER)
         {
             try {
-                game.setScreen(new MainGameScreen(game, new BomberMap(game.bomberConfig.mapNames.get(++game.currentMap)), game.difficultyLevel));
+                //jeżeli korzystamy z lokalnych map
+
+                if(game.bomberConfig.serverMaps.size() == 0)
+                    game.setScreen(new MainGameScreen(game, new BomberMap(game.bomberConfig.mapNames.get(++game.currentMap)), game.difficultyLevel));
+                //jeżeli korzystamy z map z serwera
+                else
+                    game.setScreen(new MainGameScreen(game, game.bomberConfig.serverMaps.get(++game.currentMap), game.difficultyLevel));
             } catch (IOException e) {
                 e.printStackTrace();
             }

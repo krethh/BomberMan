@@ -91,4 +91,9 @@ public class BomberMap {
         cherryPosition = Short.valueOf(properties.getProperty("cherryPosition"));
     }
 
+    public BomberMap()
+    {
+
+    }
+
 }

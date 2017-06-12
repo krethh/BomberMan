@@ -2,11 +2,10 @@
 #Mon Mar 13 19:46:28 CET 2017
 screenWidth=16
 screenHeight=16
-passagePositions=7 8 9
-multibombPositions=52 42
-superbombPositions=15
-obstaclePositions=1
-cherryPosition=4
-eliminationPosition=9
-enemyPositions=4 5 6
-heroPosition=1
+mapObjects=wwwwwwwwwwwwwwwwwpoppooowwwooppwwpwopppoopwppwpwwpwwwwwwwpwwwppwwoowowopppwpoppwwppwppppppwooppwwwwwooowwwwpwppwwwooppwwwwwpwppwwwwwwppwoowwwoowwwppoopopppopppwwwowwwwwwwpopwwwwoowwoppowppoopwwowwwwwppwwwwwowwpwoowwppppppppwwppppooppwwwppowwwwwwwwwwwwwwwww
+multibombPositions=100
+superbombPositions=18 21 35
+cherryPosition=125
+eliminationPosition=120
+enemyPositions=78 123 150
+heroPosition=17

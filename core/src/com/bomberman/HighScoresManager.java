@@ -1,9 +1,7 @@
 package com.bomberman;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.net.Socket;
 import java.util.*;
 
 /**
@@ -109,6 +107,43 @@ public class HighScoresManager {
             System.exit(100);
         }
     }
+
+    /**
+     * Ustawia najwyższe wyniki np. po otrzymaniu z serwera aktualnej listy.
+     * @param scores Wyniki do ustawienia.
+     */
+    public void setHighScores(Properties scores)
+    {
+        this.scores = scores;
+    }
+
+    /**
+     * Wysyła wynik gry na serwer.
+     * @return true, jeżeli wysłąnie się powiodło.
+     */
+    public boolean sendHighScoresToServer(BomberMan game)
+    {
+        Socket socket = null;
+        try
+        {
+            socket = new Socket(game.bomberConfig.serverIpAddress, game.bomberConfig.serverPort);
+
+            BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
+
+            outToServer.writeBytes("SET_HIGHSCORE," + game.nick + "," + game.points + "\n");
+
+            socket.close();
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+
+    }
+
 
 
 }

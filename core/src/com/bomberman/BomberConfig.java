@@ -18,57 +18,72 @@ public class BomberConfig {
     /**
      * Mówi, jak długa w każdym kierunku jest fala uderzeniowa.
      */
-    public final short shockwaveLength;
+    public short shockwaveLength;
 
     /**
      * Mówi, jak długo trwa czekanie na wybuch bomby.
      */
-    public final short bombWaitingTime;
+    public short bombWaitingTime;
 
     /**
      * Mówi o tym jak długo trwa fala uderzeniowa.
      */
-    public final short shockwaveTime;
+    public short shockwaveTime;
 
     /**
      * Szerokość panelu gry po lewej stronie (w pikselach).
      */
-    public final short panelWidth;
+    public short panelWidth;
 
     /**
      * Domyślna wysokość okienka gry w pikselach.
      */
-    public final short pixelHeight;
+    public short pixelHeight;
 
     /**
      * Domyślna szerokość okienka gry w pikselach.
      */
-    public final short pixelWidth;
+    public short pixelWidth;
 
     /**
      * Domyślna ilośc klatek na sekundę.
      */
-    public final short FPS;
+    public short FPS;
 
     /**
      * Lista map zdefiniowanych w folderze /maps.
      */
-    public final ArrayList<String> mapNames;
+    public ArrayList<String> mapNames;
+
+    /**
+     * Lista map pobranych z serwera.
+     */
+    public ArrayList<BomberMap> serverMaps;
 
     /**
      * Szybkość postaci gracza.
      */
-    public final short speed;
+    public short speed;
 
     /**
      * Czas trwania multibomby.
      */
-    public final short multibombDuration;
+    public short multibombDuration;
 
     /**
      * Czas nieśmiertelności po dostaniu bombą.
      */
-    public final short shockwaveRecoveryTime;
+    public short shockwaveRecoveryTime;
+
+    /**
+     * Adres IP serwera obsługującego.
+     */
+    public String serverIpAddress;
+
+    /**
+     * Port serwera obsługującego.
+     */
+    public int serverPort;
 
     /**
      * Tworzy obiekt konfiguracyjny.
@@ -91,6 +106,8 @@ public class BomberConfig {
         speed = Short.valueOf(properties.getProperty("speed"));
         multibombDuration = Short.valueOf(properties.getProperty("multibombDuration"));
         shockwaveRecoveryTime = Short.valueOf(properties.getProperty("shockwaveRecoveryTime"));
+        serverPort = Integer.valueOf(properties.getProperty("serverPort"));
+        serverIpAddress = properties.getProperty("serverIpAddress");
 
         /// przeszukaj folder maps w celu załadowania wszystkich map do obiektu konfiguracyjnego
         ArrayList<String> mapPaths = DirectoryUtils.findFilesWithExtension("maps", ".mapconfig");
@@ -101,5 +118,6 @@ public class BomberConfig {
             mapNames.add(mapPath);
         }
 
+        serverMaps = new ArrayList<>();
     }
 }

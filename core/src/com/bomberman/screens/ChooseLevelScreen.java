@@ -133,7 +133,14 @@ public class ChooseLevelScreen implements com.badlogic.gdx.Screen, InputProcesso
         {
             game.points = 0;
             try {
-                game.setScreen(new MainGameScreen(game, new BomberMap(game.bomberConfig.mapNames.get(0)), game.difficultyLevel));
+                if(game.bomberConfig.serverMaps.size() == 0)
+                {
+                    game.setScreen(new MainGameScreen(game, new BomberMap(game.bomberConfig.mapNames.get(0)), game.difficultyLevel));
+                }
+                else
+                {
+                    game.setScreen(new MainGameScreen(game, game.bomberConfig.serverMaps.get(0), game.difficultyLevel));
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

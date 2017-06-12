@@ -150,7 +150,7 @@ public class BomberEnemy implements Collidable {
     private void checkCollisions() {
         ArrayList<BomberCollision> collisions = new ArrayList<>();
 
-        screen.activeShockwaves.stream().forEach(s ->{
+        screen.activeShockwaves.stream().forEach(s->{
             s.shockwavePath.stream().forEach(t -> {
                 if(t == screen.getTile(x, y))
                     collisions.add(new BomberCollision(this, t, BomberCollision.collisionType.ENEMY_SHOCKWAVE));

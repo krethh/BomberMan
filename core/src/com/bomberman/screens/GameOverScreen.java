@@ -42,6 +42,7 @@ public class GameOverScreen implements Screen, InputProcessor {
 
         //update najwyższego wyniku gracza
         game.highScoresManager.setScoreIfBetter(game.nick, game.points);
+        game.highScoresManager.sendHighScoresToServer(game);
 
         Gdx.input.setInputProcessor(this);
     }

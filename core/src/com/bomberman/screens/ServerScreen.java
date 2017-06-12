@@ -10,8 +10,15 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.bomberman.BomberMan;
+import com.bomberman.BomberMap;
+import com.sun.org.apache.bcel.internal.classfile.Unknown;
+import com.sun.org.apache.bcel.internal.generic.RETURN;
 
-import java.io.File;
+import java.io.*;
+import java.net.ConnectException;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Properties;
 
 /**
  * Created by Wojtek on 21.03.2017.
@@ -24,24 +31,9 @@ public class ServerScreen implements Screen, InputProcessor {
     BomberMan game;
 
     /**
-     * Tekstura "Laczenie".
+     * Używany do wyświetlania obecnego stanu serwera.
      */
-    Texture connecting;
-
-    /**
-     * Tekstura "Pobieranie".
-     */
-    Texture downloading;
-
-    /**
-     * Tekstura "Pobieranie powiodlo sie.".
-     */
-    Texture downloadSuccess;
-
-    /**
-     * Tekstura "Pobieranie nie powiodlo sie.".
-     */
-    Texture downloadError;
+    private String serverState;
 
     /**
      * Szerokość tekstur.
@@ -82,13 +74,10 @@ public class ServerScreen implements Screen, InputProcessor {
     {
         this.game = game;
 
-        connecting = new Texture("img" + File.separator + "laczenie.png");
-        //downloading = new Texture("img" + File.separator + "downloading.png");
-        // downloadSuccess= new Texture("img" + File.separator + "DownloadSuccess.png");
-        // downloadError = new Texture("img" + File.separator + "downloadError.png");
-
         WINDOW_HEIGHT = game.bomberConfig.pixelHeight;
         WINDOW_WIDTH = game.bomberConfig.pixelWidth;
+
+        serverState = "Oczekiwanie...";
 
         Gdx.input.setInputProcessor(this);
         font = new BitmapFont();
@@ -111,14 +100,11 @@ public class ServerScreen implements Screen, InputProcessor {
         game.batch.setProjectionMatrix(camera.combined);
 
         font.setColor(Color.BLACK);
-        font.getData().setScale(3, 3);
+        font.getData().setScale(2, 2);
 
-        font.draw(game.batch, "Narazie nic tu nie ma.", Gdx.graphics.getWidth()/3 , Gdx.graphics.getHeight()/2);
-        font.draw(game.batch, "Wciśnij ESC żeby powrócić", Gdx.graphics.getWidth()/3 , Gdx.graphics.getHeight()/2 + 50);
+        font.draw(game.batch, serverState, Gdx.graphics.getWidth()/3 , Gdx.graphics.getHeight()/2);
+        font.draw(game.batch, "ESC - powrot, ENTER - polaczenie z serwerem", Gdx.graphics.getWidth()/3 , Gdx.graphics.getHeight()/2 + 50);
 
-        //rysuj przyciski
-        game.batch.draw(connecting, WINDOW_WIDTH/2 - BUTTON_WIDTH/2, WINDOW_HEIGHT*0.8f , BUTTON_WIDTH, BUTTON_HEIGHT);
-        font.draw(game.batch, "Connecting...", 100, 100);
         game.batch.end();
     }
 
@@ -175,6 +161,10 @@ public class ServerScreen implements Screen, InputProcessor {
         if(keycode == Input.Keys.ESCAPE)
         {
             game.setScreen(new MainMenuScreen(game));
+        }
+        if(keycode == Input.Keys.ENTER)
+        {
+            connectAndDownload();
         }
         return true;
     }
@@ -256,5 +246,136 @@ public class ServerScreen implements Screen, InputProcessor {
     @Override
     public boolean scrolled(int amount) {
         return false;
+    }
+
+    /**
+     * Nawiązuje połączenie z serwerem i pobiera konfigurację.
+     * @return false jeżeli połączenie się nie powiodło, true jeżeli pobrano pliki i zgodnie z planem zakończono połączenie.
+     */
+    private boolean connectAndDownload()
+    {
+        Socket socket = null;
+        try
+        {
+            String response;
+
+            serverState = "Inicjalizacja polaczenia...";
+            socket = new Socket(game.bomberConfig.serverIpAddress, game.bomberConfig.serverPort);
+
+            BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
+
+            outToServer.writeBytes("GET_INFO\n");
+            response = inFromServer.readLine();
+
+            String[] parts = response.split(",");
+
+            // sprawdzenie, czy odpowiedź jest przewidywana
+            if(!isResponseCorrect("INFO", parts[0]))
+                return false;
+
+            int mapsNumber = Integer.valueOf(parts[1]);
+
+            // pobieranie listy najlepszych wyników
+            serverState = "Pobieranie listy najlepszych wynikow...";
+
+            outToServer.writeBytes("GET_HIGHSCORES\n");
+            response = inFromServer.readLine();
+
+            parts = response.split(",");
+            if(!isResponseCorrect("HIGHSCORES", parts[0]))
+                return false;
+
+            Properties scores = new Properties();
+
+            // od int = 1, bo pierwsze słowo to HIGHSCORES
+            for(int i = 1; i < parts.length; i+=2)
+            {
+                scores.put(parts[i], parts[i+1]);
+            }
+            game.highScoresManager.setHighScores(scores);
+
+            // pobieranie ogólnej konfiguracji gry
+            serverState = "Pobieranie konfiguracji gry...";
+
+            outToServer.writeBytes("GET_GAMECONFIG\n");
+            response = inFromServer.readLine();
+
+            parts = response.split(",");
+            if(!isResponseCorrect("GAMECONFIG", parts[0]))
+                return false;
+
+            // przypisanie w konfiguracji pobranych parametrów
+            game.bomberConfig.pixelHeight = Short.valueOf(parts[1]);
+            game.bomberConfig.panelWidth = Short.valueOf(parts[2]);
+            game.bomberConfig.shockwaveLength = Short.valueOf(parts[3]);
+            game.bomberConfig.bombWaitingTime = Short.valueOf(parts[4]);
+            game.bomberConfig.shockwaveTime = Short.valueOf(parts[5]);
+            game.bomberConfig.multibombDuration = Short.valueOf(parts[6]);
+            game.bomberConfig.panelWidth = Short.valueOf(parts[7]);
+            game.bomberConfig.FPS = Short.valueOf(parts[8]);
+            game.bomberConfig.speed = Short.valueOf(parts[9]);
+            game.bomberConfig.shockwaveRecoveryTime = Short.valueOf(parts[10]);
+
+            for(int i = 1; i <= mapsNumber; i++)
+            {
+                outToServer.writeBytes("GET_MAP " + i + "\n");
+                response = inFromServer.readLine();
+
+                parts = response.split(",");
+                BomberMap map = new BomberMap();
+
+                map.screenWidth = Short.valueOf(parts[1]);
+                map.screenHeight = Short.valueOf(parts[2]);
+                map.mapObjects = parts[3];
+                map.multibombPositions = parts[4];
+                map.superbombPositions = parts[5];
+                map.cherryPosition = Short.valueOf(parts[6]);
+                map.elimnationPosition = Short.valueOf(parts[7]);
+                map.enemyPositions = parts[8];
+                map.heroPosition = Short.valueOf(parts[9]);
+
+                game.bomberConfig.serverMaps.add(map);
+            }
+
+            socket.close();
+        }
+        catch(UnknownHostException e)
+        {
+            e.printStackTrace();
+        }
+        catch(EOFException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            serverState = "Polaczenie odrzucone.";
+        }
+        return true;
+    }
+
+    /**
+     * Sprawdza, czy odpowiedź od servera jest poprawna.
+     * @param expectedResponse Oczekiwana odpowiedź
+     * @param actualResponse Odpowiedź otrzymana.
+     * @param actualResponse Odpowiedź otrzymana.
+     * @return True, jeżeli odpowiedź jest poprawna. False, jeżeli interakcja z serwerem przebiegła w sposób nieoczekiwany lub wystąpił błąd.
+     */
+    private boolean isResponseCorrect(String expectedResponse, String actualResponse)
+    {
+        if(actualResponse == "SERVER_PANIC 600")
+        {
+            serverState = "Błąd wewnętrzny serwera.";
+            return false;
+        }
+
+        else if (actualResponse != expectedResponse)
+        {
+            serverState = "Nieoczekiwana odpowiedź serwera.";
+            return false;
+        }
+        else return true;
     }
 }

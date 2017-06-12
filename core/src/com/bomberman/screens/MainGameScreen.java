@@ -837,11 +837,25 @@ public class MainGameScreen implements Screen, InputProcessor, CollisionObserver
             game.points += heroLives*20;
             game.points += 100;
 
-            if(game.currentMap != game.bomberConfig.mapNames.size() - 1)
-                game.setScreen(new NextLevelScreen(game));
+            // jeżeli korzystamy z map na dysku lokalnym
+            if(game.bomberConfig.serverMaps.size() == 0)
+            {
+                if (game.currentMap != game.bomberConfig.mapNames.size() - 1)
+                    game.setScreen(new NextLevelScreen(game));
 
+                else
+                    game.setScreen(new GameCompleteScreen(game));
+            }
+
+            // jeżeli korzystamy z map z serwera
             else
-                game.setScreen(new GameCompleteScreen(game));
+            {
+                if(game.currentMap != game.bomberConfig.serverMaps.size() -1)
+                    game.setScreen(new NextLevelScreen(game));
+
+                else
+                    game.setScreen(new GameCompleteScreen(game));
+            }
         }
     }
 
