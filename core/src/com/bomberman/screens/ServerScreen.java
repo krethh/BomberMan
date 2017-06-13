@@ -7,15 +7,11 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.bomberman.BomberMan;
 import com.bomberman.BomberMap;
-import com.sun.org.apache.bcel.internal.classfile.Unknown;
-import com.sun.org.apache.bcel.internal.generic.RETURN;
 
 import java.io.*;
-import java.net.ConnectException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Properties;
@@ -164,7 +160,8 @@ public class ServerScreen implements Screen, InputProcessor {
         }
         if(keycode == Input.Keys.ENTER)
         {
-            connectAndDownload();
+            Thread t = new Thread(() -> connectAndDownload());
+            t.start();
         }
         return true;
     }
@@ -254,7 +251,7 @@ public class ServerScreen implements Screen, InputProcessor {
      */
     private boolean connectAndDownload()
     {
-        Socket socket = null;
+        Socket socket;
         try
         {
             String response;
@@ -265,14 +262,20 @@ public class ServerScreen implements Screen, InputProcessor {
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             DataOutputStream outToServer = new DataOutputStream(socket.getOutputStream());
 
+            serverState = "Pytanie o INFO...";
             outToServer.writeBytes("GET_INFO\n");
+
             response = inFromServer.readLine();
+            serverState = "Otrzymano INFO....";
 
             String[] parts = response.split(",");
 
             // sprawdzenie, czy odpowiedź jest przewidywana
             if(!isResponseCorrect("INFO", parts[0]))
+            {
+                serverState = "Niepoprawna odpowiedz serwera!";
                 return false;
+            }
 
             int mapsNumber = Integer.valueOf(parts[1]);
 
@@ -281,15 +284,19 @@ public class ServerScreen implements Screen, InputProcessor {
 
             outToServer.writeBytes("GET_HIGHSCORES\n");
             response = inFromServer.readLine();
+            serverState = "Otrzymano liste najlepszych wynikow...";
 
             parts = response.split(",");
             if(!isResponseCorrect("HIGHSCORES", parts[0]))
+            {
+                serverState = "Niepoprawna odpowiedz serwera!";
                 return false;
+            }
 
             Properties scores = new Properties();
 
             // od int = 1, bo pierwsze słowo to HIGHSCORES
-            for(int i = 1; i < parts.length; i+=2)
+            for(int i = 1; i < parts.length - 2; i+=2)
             {
                 scores.put(parts[i], parts[i+1]);
             }
@@ -300,6 +307,7 @@ public class ServerScreen implements Screen, InputProcessor {
 
             outToServer.writeBytes("GET_GAMECONFIG\n");
             response = inFromServer.readLine();
+            serverState = "Otrzymano konfiguracje gry...";
 
             parts = response.split(",");
             if(!isResponseCorrect("GAMECONFIG", parts[0]))
@@ -319,7 +327,8 @@ public class ServerScreen implements Screen, InputProcessor {
 
             for(int i = 1; i <= mapsNumber; i++)
             {
-                outToServer.writeBytes("GET_MAP " + i + "\n");
+                outToServer.writeBytes("GET_MAP," + i + "\n");
+                serverState = "Pobieranie mapy nr " + i + "...";
                 response = inFromServer.readLine();
 
                 parts = response.split(",");
@@ -338,6 +347,7 @@ public class ServerScreen implements Screen, InputProcessor {
                 game.bomberConfig.serverMaps.add(map);
             }
 
+            serverState = "Polaczenie zakonczone sukcesem!";
             socket.close();
         }
         catch(UnknownHostException e)
@@ -353,7 +363,7 @@ public class ServerScreen implements Screen, InputProcessor {
             e.printStackTrace();
             serverState = "Polaczenie odrzucone.";
         }
-        return true;
+        return  true;
     }
 
     /**
@@ -371,7 +381,7 @@ public class ServerScreen implements Screen, InputProcessor {
             return false;
         }
 
-        else if (actualResponse != expectedResponse)
+        else if (!actualResponse.equals(expectedResponse))
         {
             serverState = "Nieoczekiwana odpowiedź serwera.";
             return false;
