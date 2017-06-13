@@ -133,7 +133,7 @@ public class EnterNickScreen implements Screen, InputProcessor {
         {
             game.setScreen(new MainMenuScreen(game));
         }
-        if(keycode == Input.Keys.ENTER)
+        if(keycode == Input.Keys.ENTER && !nick.equals(""))
         {
             game.nick = nick;
             game.setScreen(new ChooseLevelScreen(game));
@@ -162,7 +162,7 @@ public class EnterNickScreen implements Screen, InputProcessor {
      */
     @Override
     public boolean keyTyped(char character) {
-        if(character != '\b')
+        if((int) character >= 65 && (int) character <= 122)
             nick += character;
         return true;
     }

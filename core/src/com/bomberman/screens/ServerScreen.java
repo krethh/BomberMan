@@ -160,8 +160,7 @@ public class ServerScreen implements Screen, InputProcessor {
         }
         if(keycode == Input.Keys.ENTER)
         {
-            Thread t = new Thread(() -> connectAndDownload());
-            t.start();
+            new Thread(() -> connectAndDownload()).start();
         }
         return true;
     }
